@@ -37,30 +37,34 @@
       }
     }
 
-    body {
-      font-family: var(--font-sans);
-      background: var(--color-background-secondary);
-      color: var(--color-text-primary);
-      min-height: 100vh;
-    }
+    body { font-family: var(--font-sans); background: var(--color-background-secondary); color: var(--color-text-primary); min-height: 100vh; }
 
     input, select {
-      font-family: var(--font-sans);
-      font-size: 14px;
-      padding: 7px 10px;
-      border: 0.5px solid var(--color-border-secondary);
-      border-radius: var(--border-radius-md);
-      background: var(--color-background-primary);
-      color: var(--color-text-primary);
-      outline: none;
+      font-family: var(--font-sans); font-size: 14px; padding: 7px 10px;
+      border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md);
+      background: var(--color-background-primary); color: var(--color-text-primary); outline: none;
     }
     input:focus, select:focus { border-color: #D4537E; box-shadow: 0 0 0 2px rgba(212,83,126,0.15); }
 
     #app { max-width: 800px; margin: 0 auto; min-height: 100vh; background: var(--color-background-secondary); }
-
     .screen { display: none; }
     .screen.active { display: block; }
 
+    /* Sync status bar */
+    #sync-bar { display: none; align-items: center; gap: 6px; padding: 6px 1.25rem; font-size: 12px; background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); }
+    #sync-bar.visible { display: flex; }
+    #sync-bar.syncing { color: #854F0B; background: #FAEEDA; }
+    #sync-bar.synced  { color: #3B6D11; background: #EAF3DE; }
+    #sync-bar.error   { color: #A32D2D; background: #FCEBEB; }
+    #sync-bar i { font-size: 14px; }
+
+    /* Firebase config banner */
+    #config-banner { display: none; padding: 0.75rem 1.25rem; background: #FAEEDA; border-bottom: 0.5px solid #FAC775; font-size: 13px; color: #854F0B; align-items: center; gap: 8px; }
+    #config-banner.visible { display: flex; }
+    #config-banner i { font-size: 16px; flex-shrink: 0; }
+    #config-banner a { color: #633806; font-weight: 500; text-decoration: underline; cursor: pointer; }
+
+    /* Login */
     #login-screen { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem; }
     #login-screen.active { display: flex; }
     .login-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 2.5rem 2rem; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 4px 24px rgba(0,0,0,0.07); }
@@ -99,7 +103,6 @@
     .delete-person-btn { position: absolute; top: 6px; right: 6px; background: none; border: none; cursor: pointer; color: var(--color-text-secondary); font-size: 14px; padding: 2px 4px; border-radius: 4px; display: none; line-height: 1; }
     .person-card:hover .delete-person-btn { display: block; }
     .delete-person-btn:hover { color: #A32D2D; background: var(--color-background-secondary); }
-
     .add-person-card { background: var(--color-background-primary); border: 0.5px dashed var(--color-border-secondary); border-radius: var(--border-radius-lg); padding: 1rem; text-align: center; cursor: pointer; color: var(--color-text-secondary); font-size: 13px; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: border-color 0.15s, color 0.15s; }
     .add-person-card:hover { border-color: #D4537E; color: #D4537E; }
 
@@ -147,7 +150,6 @@
     .icon-btn.danger:hover { color: #A32D2D; background: var(--color-background-danger); }
 
     .section-label { font-size: 11px; font-weight: 600; color: var(--color-text-secondary); margin: 1.25rem 0 0.5rem; text-transform: uppercase; letter-spacing: 0.06em; }
-
     .empty-state { text-align: center; padding: 2rem 1rem; color: var(--color-text-secondary); font-size: 14px; }
     .empty-state i { font-size: 30px; display: block; margin-bottom: 0.5rem; }
 
@@ -181,11 +183,22 @@
     .stat-card { background: var(--color-background-primary); border-radius: var(--border-radius-md); padding: 1rem; text-align: center; border: 0.5px solid var(--color-border-tertiary); }
     .stat-label { font-size: 13px; color: var(--color-text-secondary); }
     .stat-value { font-size: 26px; font-weight: 600; margin-top: 4px; }
+
+    .config-modal { max-width: 520px; }
+    .config-modal textarea { width: 100%; font-family: monospace; font-size: 12px; padding: 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-secondary); color: var(--color-text-primary); resize: vertical; min-height: 180px; outline: none; margin-top: 4px; }
+    .config-modal textarea:focus { border-color: #D4537E; }
+    .config-step { display: flex; gap: 10px; margin-bottom: 0.75rem; align-items: flex-start; }
+    .step-num { width: 22px; height: 22px; border-radius: 50%; background: #D4537E; color: white; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-text { font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; }
+    .step-text a { color: #185FA5; }
+    .step-text strong { color: var(--color-text-primary); }
+    .config-error { font-size: 12px; color: var(--color-text-danger); margin-top: 6px; display: none; }
+    code { font-size: 12px; background: var(--color-background-secondary); padding: 1px 5px; border-radius: 4px; font-family: monospace; }
   </style>
 </head>
 <body>
 <div id="app">
-  <!-- Login -->
+
   <div id="login-screen" class="screen active">
     <div class="login-card">
       <div class="login-icon"><i class="ti ti-gift"></i></div>
@@ -198,8 +211,16 @@
     </div>
   </div>
 
-  <!-- Main App -->
   <div id="main-screen" class="screen">
+    <div id="config-banner">
+      <i class="ti ti-cloud-off"></i>
+      <span>Firebase is not configured — changes are saved locally only. <a onclick="openConfigModal()">Connect Firebase</a> to sync across all devices.</span>
+    </div>
+    <div id="sync-bar">
+      <i class="ti ti-cloud" id="sync-icon"></i>
+      <span id="sync-text">Synced</span>
+    </div>
+
     <div class="topbar">
       <div class="topbar-left">
         <span class="topbar-logo"><i class="ti ti-gift"></i></span>
@@ -208,8 +229,9 @@
       <div class="topbar-right">
         <span class="who-label">Viewing as:</span>
         <select class="who-select" id="current-user-select" onchange="setCurrentUser(this.value)"></select>
-        <button class="icon-btn-top" onclick="openHelp()" aria-label="Help"><i class="ti ti-help-circle"></i></button>
-        <button class="icon-btn-top" onclick="logout()" aria-label="Log out"><i class="ti ti-logout"></i></button>
+        <button class="icon-btn-top" onclick="openHelp()" aria-label="Help" title="Help"><i class="ti ti-help-circle"></i></button>
+        <button class="icon-btn-top" onclick="openConfigModal()" aria-label="Firebase settings" title="Firebase sync settings"><i class="ti ti-cloud"></i></button>
+        <button class="icon-btn-top" onclick="logout()" aria-label="Log out" title="Log out"><i class="ti ti-logout"></i></button>
       </div>
     </div>
 
@@ -283,37 +305,37 @@
       <div class="help-scroll">
         <div class="help-section">
           <h4><i class="ti ti-login"></i> Logging in</h4>
-          <p>Everyone in the family uses the same password to access the app. The default password is <strong>family123</strong>. Once in, select your name from the "Viewing as" menu in the top right so the app knows who you are.</p>
+          <p>Everyone in the family uses the same password. The default is <strong>family123</strong>. Once in, select your name from "Viewing as" in the top right so the app knows who you are.</p>
         </div>
         <hr class="help-divider">
         <div class="help-section">
           <h4><i class="ti ti-list"></i> Your wishlist</h4>
-          <p>Click your own name card to open your wishlist. Use "Add to my list" to add gifts you'd like to receive. You can include a name, occasion tag, price, and a link to the item. Edit or delete your gifts anytime using the pencil and trash icons.</p>
+          <p>Click your own name card to open your wishlist. Use "Add to my list" to add gifts you'd like to receive, including name, occasion, price, and a link. Edit or delete with the pencil and trash icons.</p>
         </div>
         <hr class="help-divider">
         <div class="help-section">
           <h4><i class="ti ti-check"></i> Claiming gifts</h4>
-          <p>Click another family member's name to see their wishlist. Check the box next to a gift to claim it — this lets everyone else know you're buying it, so there are no duplicates. The recipient cannot see who claimed their gifts.</p>
+          <p>Click another family member's name, then check the box next to a gift to claim it. This prevents duplicates. The recipient cannot see who claimed their gifts.</p>
         </div>
         <hr class="help-divider">
         <div class="help-section">
           <h4><i class="ti ti-bulb"></i> Adding gift ideas for others</h4>
-          <p>When viewing someone else's list, click "Add gift idea" to suggest a gift for them. Your idea appears in a separate section at the bottom of their list, marked with your name. They can see it too and dismiss ideas they don't want.</p>
+          <p>When viewing someone else's list, click "Add gift idea" to suggest a gift. It appears in a separate section marked with your name. They can dismiss ideas they don't want.</p>
         </div>
         <hr class="help-divider">
         <div class="help-section">
-          <h4><i class="ti ti-filter"></i> Filtering by occasion</h4>
-          <p>Use the filter chips (Birthday, Christmas, Hanukkah, Other) below the wishlist header to show only gifts for a specific occasion.</p>
+          <h4><i class="ti ti-cloud"></i> Real-time sync</h4>
+          <p>Click the cloud icon in the top bar to connect Firebase. Once connected, all changes sync instantly across every family member's device. A green status bar confirms you're synced.</p>
         </div>
         <hr class="help-divider">
         <div class="help-section">
           <h4><i class="ti ti-user-plus"></i> Managing family members</h4>
-          <p>Click "Add member" in the people grid to add a new family member. To remove someone, hover over their card and click the small X that appears. Removing a member also deletes all their wishlist items.</p>
+          <p>Click "Add member" to add someone. Hover over a card and click the X to remove them — this also removes all their wishlist items.</p>
         </div>
         <hr class="help-divider">
         <div class="help-section">
           <h4><i class="ti ti-layout-grid"></i> Overview tab</h4>
-          <p>Switch to the Overview tab to see a summary of everyone's wishlists — total wishes, how many gifts have been claimed, and a progress bar per person.</p>
+          <p>See everyone's wishlist progress at a glance — total wishes, gifts claimed, and a progress bar per person.</p>
         </div>
       </div>
       <div class="modal-actions">
@@ -321,7 +343,55 @@
       </div>
     </div>
   </div>
+
+  <!-- Firebase config modal -->
+  <div class="modal-overlay" id="config-modal">
+    <div class="modal config-modal">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+        <h3 style="margin:0">Connect Firebase sync</h3>
+        <button class="icon-btn" onclick="closeConfigModal()" aria-label="Close"><i class="ti ti-x"></i></button>
+      </div>
+      <div style="margin-bottom:1rem">
+        <div class="config-step">
+          <div class="step-num">1</div>
+          <div class="step-text">Go to <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a> and create a free project.</div>
+        </div>
+        <div class="config-step">
+          <div class="step-num">2</div>
+          <div class="step-text">In your project, open <strong>Build → Realtime Database</strong>, click "Create database", choose a region, and start in <strong>test mode</strong> (you can lock it down later).</div>
+        </div>
+        <div class="config-step">
+          <div class="step-num">3</div>
+          <div class="step-text">Go to <strong>Project Settings</strong> (gear icon) → <strong>Your apps</strong> → click the web icon <code>&lt;/&gt;</code> to register a web app. Copy the <code>firebaseConfig</code> object shown.</div>
+        </div>
+        <div class="config-step">
+          <div class="step-num">4</div>
+          <div class="step-text">Paste the <code>{...}</code> config object below and click Connect.</div>
+        </div>
+      </div>
+      <label>Paste your firebaseConfig object</label>
+      <textarea id="firebase-config-input" placeholder='{
+  "apiKey": "AIza...",
+  "authDomain": "your-app.firebaseapp.com",
+  "databaseURL": "https://your-app-default-rtdb.firebaseio.com",
+  "projectId": "your-app",
+  "storageBucket": "your-app.appspot.com",
+  "messagingSenderId": "123456789",
+  "appId": "1:123456789:web:abc123"
+}'></textarea>
+      <div class="config-error" id="config-error"></div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeConfigModal()">Cancel</button>
+        <button class="btn-save" onclick="saveFirebaseConfig()"><i class="ti ti-plug" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Connect</button>
+      </div>
+    </div>
+  </div>
+
 </div>
+
+<!-- Firebase SDK (compat v9) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script>
 const FAMILY_PASSWORD = 'family123';
@@ -349,18 +419,112 @@ let state = {
   pendingDeletePersonId:null, modalMode:'own',
 };
 
-function save() { try { localStorage.setItem('fgm_v1', JSON.stringify(state)); } catch(e){} }
-function load() { try { const s = localStorage.getItem('fgm_v1'); if(s) state = JSON.parse(s); } catch(e){} }
+// ─── Firebase ────────────────────────────────────────────────────────────────
+
+let db = null;
+let firebaseConfigured = false;
+let syncDebounce = null;
+
+function loadFirebaseConfig() {
+  try { const r = localStorage.getItem('fgm_fb_cfg'); return r ? JSON.parse(r) : null; } catch(e){ return null; }
+}
+
+function initFirebase(config) {
+  try {
+    if (firebase.apps.length) { firebase.apps.forEach(a => { try { a.delete(); } catch(e){} }); }
+    firebase.initializeApp(config);
+    db = firebase.database();
+    firebaseConfigured = true;
+    setSyncStatus('syncing', 'Connecting…');
+    db.ref('giftmanager').on('value', snapshot => {
+      const data = snapshot.val();
+      if (data) {
+        const cu = state.currentUser, sel = state.selectedPersonId, fil = state.filterOccasion;
+        state = Object.assign({}, state, {
+          people: data.people || state.people,
+          gifts: data.gifts || state.gifts,
+          nextId: data.nextId || state.nextId,
+          nextPersonId: data.nextPersonId || state.nextPersonId,
+          currentUser: cu, selectedPersonId: sel, filterOccasion: fil,
+        });
+        localSave();
+        if (document.getElementById('main-screen').classList.contains('active')) {
+          renderUserSelect(); renderPeopleGrid(); renderWishlist();
+        }
+      }
+      setSyncStatus('synced', 'Synced');
+    }, () => setSyncStatus('error', 'Sync error — check Firebase rules'));
+    document.getElementById('config-banner').classList.remove('visible');
+    document.getElementById('sync-bar').classList.add('visible');
+    return true;
+  } catch(e) { firebaseConfigured = false; return false; }
+}
+
+function pushToFirebase() {
+  if (!db || !firebaseConfigured) return;
+  setSyncStatus('syncing', 'Saving…');
+  if (syncDebounce) clearTimeout(syncDebounce);
+  syncDebounce = setTimeout(() => {
+    db.ref('giftmanager').set({
+      people: state.people, gifts: state.gifts,
+      nextId: state.nextId, nextPersonId: state.nextPersonId,
+    }).then(() => setSyncStatus('synced', 'Synced'))
+      .catch(() => setSyncStatus('error', 'Save failed — check your connection'));
+  }, 400);
+}
+
+function setSyncStatus(type, text) {
+  const bar = document.getElementById('sync-bar');
+  bar.className = 'visible ' + type;
+  document.getElementById('sync-text').textContent = text;
+  document.getElementById('sync-icon').className =
+    type === 'syncing' ? 'ti ti-cloud-upload' :
+    type === 'error'   ? 'ti ti-cloud-off' : 'ti ti-cloud-check';
+}
+
+function openConfigModal() {
+  const existing = loadFirebaseConfig();
+  if (existing) document.getElementById('firebase-config-input').value = JSON.stringify(existing, null, 2);
+  document.getElementById('config-error').style.display = 'none';
+  document.getElementById('config-modal').classList.add('open');
+}
+function closeConfigModal() { document.getElementById('config-modal').classList.remove('open'); }
+
+function saveFirebaseConfig() {
+  const raw = document.getElementById('firebase-config-input').value.trim();
+  const errEl = document.getElementById('config-error');
+  errEl.style.display = 'none';
+  let config;
+  try { config = JSON.parse(raw); }
+  catch(e) { errEl.textContent = 'Invalid JSON — paste only the { ... } object from Firebase.'; errEl.style.display = 'block'; return; }
+  if (!config.apiKey || !config.databaseURL) {
+    errEl.textContent = 'Missing required fields. Make sure the config includes apiKey and databaseURL.'; errEl.style.display = 'block'; return;
+  }
+  localStorage.setItem('fgm_fb_cfg', JSON.stringify(config));
+  if (initFirebase(config)) { closeConfigModal(); pushToFirebase(); }
+  else { errEl.textContent = 'Could not connect. Double-check your config and try again.'; errEl.style.display = 'block'; }
+}
+
+// ─── Local storage ────────────────────────────────────────────────────────────
+
+function localSave() {
+  try { localStorage.setItem('fgm_v2', JSON.stringify({people:state.people,gifts:state.gifts,nextId:state.nextId,nextPersonId:state.nextPersonId})); } catch(e){}
+}
+function localLoad() {
+  try { const s = localStorage.getItem('fgm_v2'); if(s){const d=JSON.parse(s);state.people=d.people||state.people;state.gifts=d.gifts||state.gifts;state.nextId=d.nextId||state.nextId;state.nextPersonId=d.nextPersonId||state.nextPersonId;} } catch(e){}
+}
+function save() { localSave(); pushToFirebase(); }
+
+// ─── Auth ─────────────────────────────────────────────────────────────────────
 
 function doLogin() {
   if (document.getElementById('pw-input').value === FAMILY_PASSWORD) {
     document.getElementById('pw-err').style.display = 'none';
     document.getElementById('login-screen').classList.remove('active');
     document.getElementById('main-screen').classList.add('active');
+    if (!firebaseConfigured) document.getElementById('config-banner').classList.add('visible');
     renderApp();
-  } else {
-    document.getElementById('pw-err').style.display = 'block';
-  }
+  } else { document.getElementById('pw-err').style.display = 'block'; }
 }
 document.getElementById('pw-input').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
 
@@ -370,237 +534,191 @@ function logout() {
   document.getElementById('pw-input').value = '';
 }
 
+// ─── UI ───────────────────────────────────────────────────────────────────────
+
 function openHelp() { document.getElementById('help-modal').classList.add('open'); }
 function closeHelp() { document.getElementById('help-modal').classList.remove('open'); }
-
-function setCurrentUser(name) { state.currentUser = name; save(); renderWishlist(); }
+function setCurrentUser(n) { state.currentUser = n; renderWishlist(); }
 
 function switchTab(tab, btn) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('tab-wishlists').style.display = tab === 'wishlists' ? 'block' : 'none';
-  document.getElementById('tab-overview').style.display = tab === 'overview' ? 'block' : 'none';
-  if (tab === 'overview') renderOverview();
+  document.getElementById('tab-wishlists').style.display = tab==='wishlists'?'block':'none';
+  document.getElementById('tab-overview').style.display   = tab==='overview'?'block':'none';
+  if (tab==='overview') renderOverview();
 }
 
 function renderApp() { renderUserSelect(); renderPeopleGrid(); renderWishlist(); }
 
 function renderUserSelect() {
-  const sel = document.getElementById('current-user-select');
-  sel.innerHTML = state.people.map(p =>
-    `<option value="${p.name}"${p.name===state.currentUser?' selected':''}>${p.name}</option>`
-  ).join('');
+  document.getElementById('current-user-select').innerHTML =
+    state.people.map(p=>`<option value="${p.name}"${p.name===state.currentUser?' selected':''}>${p.name}</option>`).join('');
 }
 
-function getInitials(name) { return name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); }
+function getInitials(n) { return n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); }
 
 function renderPeopleGrid() {
-  const grid = document.getElementById('people-grid');
   const cards = state.people.map(p => {
-    const col = AVATAR_COLORS[p.color % AVATAR_COLORS.length];
-    const count = state.gifts.filter(g => g.personId === p.id).length;
+    const col = AVATAR_COLORS[p.color%AVATAR_COLORS.length];
+    const cnt = state.gifts.filter(g=>g.personId===p.id).length;
     return `<div class="person-card${p.id===state.selectedPersonId?' selected':''}" onclick="selectPerson(${p.id})">
       <button class="delete-person-btn" onclick="openDeletePerson(event,${p.id})" aria-label="Remove ${p.name}"><i class="ti ti-x"></i></button>
       <div class="avatar" style="background:${col.bg};color:${col.color}">${getInitials(p.name)}</div>
       <div class="name">${p.name}</div>
-      <div class="gift-count">${count} gift${count!==1?'s':''}</div>
+      <div class="gift-count">${cnt} gift${cnt!==1?'s':''}</div>
     </div>`;
   }).join('');
-  grid.innerHTML = cards + `<div class="add-person-card" onclick="openAddPerson()">
-    <i class="ti ti-user-plus" style="font-size:26px"></i><span>Add member</span>
-  </div>`;
+  document.getElementById('people-grid').innerHTML = cards +
+    `<div class="add-person-card" onclick="openAddPerson()"><i class="ti ti-user-plus" style="font-size:26px"></i><span>Add member</span></div>`;
 }
 
-function selectPerson(id) { state.selectedPersonId = id; state.filterOccasion = 'all'; save(); renderPeopleGrid(); renderWishlist(); }
-
+function selectPerson(id) { state.selectedPersonId=id; state.filterOccasion='all'; renderPeopleGrid(); renderWishlist(); }
 function openAddPerson() { document.getElementById('add-person-form').classList.add('open'); document.getElementById('new-person-name').focus(); }
-function closeAddPerson() { document.getElementById('add-person-form').classList.remove('open'); document.getElementById('new-person-name').value = ''; }
+function closeAddPerson() { document.getElementById('add-person-form').classList.remove('open'); document.getElementById('new-person-name').value=''; }
 function saveNewPerson() {
-  const name = document.getElementById('new-person-name').value.trim();
-  if (!name) return;
-  const p = {id: state.nextPersonId++, name, color: state.people.length};
-  state.people.push(p); state.selectedPersonId = p.id;
+  const name = document.getElementById('new-person-name').value.trim(); if(!name) return;
+  const p = {id:state.nextPersonId++,name,color:state.people.length};
+  state.people.push(p); state.selectedPersonId=p.id;
   save(); closeAddPerson(); renderUserSelect(); renderPeopleGrid(); renderWishlist();
 }
 
-function openDeletePerson(e, id) {
+function openDeletePerson(e,id) {
   e.stopPropagation();
-  const p = state.people.find(p => p.id === id);
-  const cnt = state.gifts.filter(g => g.personId === id).length;
-  state.pendingDeletePersonId = id;
-  document.getElementById('delete-person-text').innerHTML =
-    `This will permanently remove <span class="confirm-name">${p.name}</span> and their ${cnt} gift wish${cnt!==1?'es':''} from the family list.`;
+  const p=state.people.find(p=>p.id===id), cnt=state.gifts.filter(g=>g.personId===id).length;
+  state.pendingDeletePersonId=id;
+  document.getElementById('delete-person-text').innerHTML=`This will permanently remove <span class="confirm-name">${p.name}</span> and their ${cnt} gift wish${cnt!==1?'es':''} from the family list.`;
   document.getElementById('delete-person-modal').classList.add('open');
 }
-function closeDeletePersonModal() { document.getElementById('delete-person-modal').classList.remove('open'); state.pendingDeletePersonId = null; }
+function closeDeletePersonModal() { document.getElementById('delete-person-modal').classList.remove('open'); state.pendingDeletePersonId=null; }
 function confirmDeletePerson() {
-  const id = state.pendingDeletePersonId; if (!id) return;
-  const removedName = state.people.find(p => p.id === id)?.name;
-  state.gifts = state.gifts.filter(g => g.personId !== id);
-  state.people = state.people.filter(p => p.id !== id);
-  if (state.selectedPersonId === id) state.selectedPersonId = state.people.length ? state.people[0].id : null;
-  if (state.currentUser === removedName) state.currentUser = state.people.length ? state.people[0].name : '';
+  const id=state.pendingDeletePersonId; if(!id) return;
+  const removed=state.people.find(p=>p.id===id)?.name;
+  state.gifts=state.gifts.filter(g=>g.personId!==id);
+  state.people=state.people.filter(p=>p.id!==id);
+  if(state.selectedPersonId===id) state.selectedPersonId=state.people.length?state.people[0].id:null;
+  if(state.currentUser===removed) state.currentUser=state.people.length?state.people[0].name:'';
   closeDeletePersonModal(); save(); renderUserSelect(); renderPeopleGrid(); renderWishlist();
 }
 
 function renderWishlist() {
-  if (!state.selectedPersonId || !state.people.length) {
-    document.getElementById('wishlist-area').innerHTML = `<div class="empty-state"><i class="ti ti-users"></i>Add a family member to get started.</div>`;
+  if(!state.selectedPersonId||!state.people.length){
+    document.getElementById('wishlist-area').innerHTML=`<div class="empty-state"><i class="ti ti-users"></i>Add a family member to get started.</div>`;
     return;
   }
-  const person = state.people.find(p => p.id === state.selectedPersonId);
-  if (!person) return;
-  const isOwnList = person.name === state.currentUser;
-  let allGifts = state.gifts.filter(g => g.personId === state.selectedPersonId);
-  if (state.filterOccasion !== 'all') allGifts = allGifts.filter(g => g.occasion === state.filterOccasion);
+  const person=state.people.find(p=>p.id===state.selectedPersonId); if(!person) return;
+  const isOwnList=person.name===state.currentUser;
+  let allGifts=state.gifts.filter(g=>g.personId===state.selectedPersonId);
+  if(state.filterOccasion!=='all') allGifts=allGifts.filter(g=>g.occasion===state.filterOccasion);
 
-  const filters = ['all','birthday','christmas','hanukkah','other'];
-  const filterHTML = `<div class="filter-row">${filters.map(f =>
-    `<button class="filter-chip${state.filterOccasion===f?' active':''}" onclick="setFilter('${f}')">${f==='all'?'All':f.charAt(0).toUpperCase()+f.slice(1)}</button>`
-  ).join('')}</div>`;
+  const filters=['all','birthday','christmas','hanukkah','other'];
+  const filterHTML=`<div class="filter-row">${filters.map(f=>`<button class="filter-chip${state.filterOccasion===f?' active':''}" onclick="setFilter('${f}')">${f==='all'?'All':f.charAt(0).toUpperCase()+f.slice(1)}</button>`).join('')}</div>`;
 
   function giftCard(g) {
-    const canClaim = !isOwnList && !g.isSuggestion;
-    const claimBox = canClaim
-      ? `<input type="checkbox" class="gift-check"${g.claimed?' checked':''} onchange="toggleClaim(${g.id},this.checked)" title="${g.claimed?'Unclaim':'Claim this gift'}">`
-      : `<span style="width:15px;flex-shrink:0;display:inline-block"></span>`;
-    const nameClass = 'gift-name' + (!isOwnList && g.claimed ? ' claimed-text' : '');
-    const claimedBadge = !isOwnList && g.claimed ? `<span class="claimed-by">Claimed by ${g.claimedBy}</span>` : '';
-    const suggBadge = g.isSuggestion ? `<span class="suggested-by"><i class="ti ti-bulb" style="font-size:11px"></i> Idea from ${g.suggestedBy}</span>` : '';
-    let actions = '';
-    if (isOwnList && !g.isSuggestion) {
-      actions = `<div class="gift-actions">
-        <button class="icon-btn" onclick="openEditGift(${g.id})" title="Edit"><i class="ti ti-edit"></i></button>
-        <button class="icon-btn danger" onclick="deleteGift(${g.id})" title="Delete"><i class="ti ti-trash"></i></button>
-      </div>`;
-    } else {
-      actions = `<div class="gift-actions"><button class="icon-btn danger" onclick="deleteGift(${g.id})" title="Remove"><i class="ti ti-trash"></i></button></div>`;
-    }
+    const canClaim=!isOwnList&&!g.isSuggestion;
+    const claimBox=canClaim?`<input type="checkbox" class="gift-check"${g.claimed?' checked':''} onchange="toggleClaim(${g.id},this.checked)">`:`<span style="width:15px;flex-shrink:0;display:inline-block"></span>`;
+    let actions='';
+    if(isOwnList&&!g.isSuggestion) actions=`<div class="gift-actions"><button class="icon-btn" onclick="openEditGift(${g.id})" title="Edit"><i class="ti ti-edit"></i></button><button class="icon-btn danger" onclick="deleteGift(${g.id})" title="Delete"><i class="ti ti-trash"></i></button></div>`;
+    else actions=`<div class="gift-actions"><button class="icon-btn danger" onclick="deleteGift(${g.id})" title="Remove"><i class="ti ti-trash"></i></button></div>`;
     return `<div class="gift-item${g.claimed?' claimed':''}${g.isSuggestion?' suggestion':''}">
       ${claimBox}
       <div class="gift-info">
-        <div class="${nameClass}">${g.name}</div>
+        <div class="gift-name${!isOwnList&&g.claimed?' claimed-text':''}">${g.name}</div>
         <div class="gift-meta">
           <span class="tag ${g.occasion}">${g.occasion}</span>
           ${g.isSuggestion?'<span class="tag idea">idea</span>':''}
           ${g.price?`<span class="price-tag">${g.price}</span>`:''}
           ${g.link?`<a class="gift-link" href="${g.link}" target="_blank">View link</a>`:''}
-          ${claimedBadge}${suggBadge}
+          ${!isOwnList&&g.claimed?`<span class="claimed-by">Claimed by ${g.claimedBy}</span>`:''}
+          ${g.isSuggestion?`<span class="suggested-by"><i class="ti ti-bulb" style="font-size:11px"></i> Idea from ${g.suggestedBy}</span>`:''}
         </div>
-      </div>
-      ${actions}
+      </div>${actions}
     </div>`;
   }
 
-  const wishlistGifts = allGifts.filter(g => !g.isSuggestion);
-  const ideaGifts = allGifts.filter(g => g.isSuggestion);
-  const wishlistHTML = wishlistGifts.length ? wishlistGifts.map(giftCard).join('') :
-    `<div class="empty-state" style="padding:1rem"><i class="ti ti-gift"></i>${isOwnList?'Add gifts to your wishlist above.':'No wishlist items yet.'}</div>`;
-  const ideasHTML = ideaGifts.length ? ideaGifts.map(giftCard).join('') :
-    `<div style="font-size:13px;color:var(--color-text-secondary);padding:0.5rem 0">${isOwnList?'No ideas from family yet.':'No ideas added yet. Add one above!'}</div>`;
-  const headerBtns = isOwnList
-    ? `<div class="header-btns"><button class="btn-outline" onclick="openAddGift()"><i class="ti ti-plus"></i> Add to my list</button></div>`
-    : `<div class="header-btns"><button class="btn-outline pink" onclick="openSuggestGift()"><i class="ti ti-bulb"></i> Add gift idea</button></div>`;
+  const wishGifts=allGifts.filter(g=>!g.isSuggestion), ideaGifts=allGifts.filter(g=>g.isSuggestion);
+  const wishHTML=wishGifts.length?wishGifts.map(giftCard).join(''):`<div class="empty-state" style="padding:1rem"><i class="ti ti-gift"></i>${isOwnList?'Add gifts to your wishlist above.':'No wishlist items yet.'}</div>`;
+  const ideaHTML=ideaGifts.length?ideaGifts.map(giftCard).join(''):`<div style="font-size:13px;color:var(--color-text-secondary);padding:0.5rem 0">${isOwnList?'No ideas from family yet.':'No ideas added yet — add one above!'}</div>`;
+  const btns=isOwnList
+    ?`<div class="header-btns"><button class="btn-outline" onclick="openAddGift()"><i class="ti ti-plus"></i> Add to my list</button></div>`
+    :`<div class="header-btns"><button class="btn-outline pink" onclick="openSuggestGift()"><i class="ti ti-bulb"></i> Add gift idea</button></div>`;
 
-  document.getElementById('wishlist-area').innerHTML = `
-    <div class="wishlist-header">
-      <h3>${isOwnList ? 'My wishlist' : `${person.name}'s wishlist`}</h3>
-      ${headerBtns}
-    </div>
-    ${filterHTML}
-    ${wishlistHTML}
-    <div class="section-label">${isOwnList ? 'Gift ideas from family' : 'Your gift ideas for ' + person.name}</div>
-    ${ideasHTML}
-  `;
+  document.getElementById('wishlist-area').innerHTML=`
+    <div class="wishlist-header"><h3>${isOwnList?'My wishlist':`${person.name}'s wishlist`}</h3>${btns}</div>
+    ${filterHTML}${wishHTML}
+    <div class="section-label">${isOwnList?'Gift ideas from family':'Your gift ideas for '+person.name}</div>
+    ${ideaHTML}`;
 }
 
-function setFilter(f) { state.filterOccasion = f; renderWishlist(); }
+function setFilter(f) { state.filterOccasion=f; renderWishlist(); }
 
-function toggleClaim(giftId, checked) {
-  const g = state.gifts.find(g => g.id === giftId); if (!g) return;
-  g.claimed = checked; g.claimedBy = checked ? state.currentUser : '';
+function toggleClaim(giftId,checked) {
+  const g=state.gifts.find(g=>g.id===giftId); if(!g) return;
+  g.claimed=checked; g.claimedBy=checked?state.currentUser:'';
   save(); renderPeopleGrid(); renderWishlist();
 }
+function deleteGift(id) { state.gifts=state.gifts.filter(g=>g.id!==id); save(); renderPeopleGrid(); renderWishlist(); }
 
-function deleteGift(id) { state.gifts = state.gifts.filter(g => g.id !== id); save(); renderPeopleGrid(); renderWishlist(); }
-
-function openGiftModal(mode, giftId) {
-  state.modalMode = mode; state.editingGiftId = giftId || null;
-  const person = state.people.find(p => p.id === state.selectedPersonId);
-  document.getElementById('gift-name-input').value = '';
-  document.getElementById('gift-occasion-input').value = 'christmas';
-  document.getElementById('gift-price-input').value = '';
-  document.getElementById('gift-link-input').value = '';
-  if (mode === 'own' && !giftId) {
-    document.getElementById('modal-title').textContent = 'Add to my wishlist';
-    document.getElementById('modal-sub').textContent = '';
-  } else if (mode === 'own' && giftId) {
-    document.getElementById('modal-title').textContent = 'Edit gift';
-    document.getElementById('modal-sub').textContent = '';
-    const g = state.gifts.find(g => g.id === giftId);
-    document.getElementById('gift-name-input').value = g.name;
-    document.getElementById('gift-occasion-input').value = g.occasion;
-    document.getElementById('gift-price-input').value = g.price;
-    document.getElementById('gift-link-input').value = g.link;
-  } else if (mode === 'suggest') {
-    document.getElementById('modal-title').textContent = `Add a gift idea for ${person.name}`;
-    document.getElementById('modal-sub').textContent = `This will appear as a suggestion on ${person.name}'s list — they can see it, but it's marked as coming from you.`;
+function openGiftModal(mode,giftId) {
+  state.modalMode=mode; state.editingGiftId=giftId||null;
+  const person=state.people.find(p=>p.id===state.selectedPersonId);
+  ['gift-name-input','gift-price-input','gift-link-input'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('gift-occasion-input').value='christmas';
+  if(mode==='own'&&!giftId){ document.getElementById('modal-title').textContent='Add to my wishlist'; document.getElementById('modal-sub').textContent=''; }
+  else if(mode==='own'&&giftId){
+    document.getElementById('modal-title').textContent='Edit gift'; document.getElementById('modal-sub').textContent='';
+    const g=state.gifts.find(g=>g.id===giftId);
+    document.getElementById('gift-name-input').value=g.name;
+    document.getElementById('gift-occasion-input').value=g.occasion;
+    document.getElementById('gift-price-input').value=g.price;
+    document.getElementById('gift-link-input').value=g.link;
+  } else if(mode==='suggest'){
+    document.getElementById('modal-title').textContent=`Add a gift idea for ${person.name}`;
+    document.getElementById('modal-sub').textContent=`This will appear as a suggestion on ${person.name}'s list — they can see it, but it's marked as coming from you.`;
   }
   document.getElementById('gift-modal').classList.add('open');
 }
-
-function openAddGift() { openGiftModal('own', null); }
-function openSuggestGift() { openGiftModal('suggest', null); }
-function openEditGift(id) { openGiftModal('own', id); }
+function openAddGift() { openGiftModal('own',null); }
+function openSuggestGift() { openGiftModal('suggest',null); }
+function openEditGift(id) { openGiftModal('own',id); }
 function closeGiftModal() { document.getElementById('gift-modal').classList.remove('open'); }
 
 function saveGift() {
-  const name = document.getElementById('gift-name-input').value.trim(); if (!name) return;
-  const occasion = document.getElementById('gift-occasion-input').value;
-  const price = document.getElementById('gift-price-input').value.trim();
-  const link = document.getElementById('gift-link-input').value.trim();
-  if (state.editingGiftId) {
-    Object.assign(state.gifts.find(g => g.id === state.editingGiftId), {name, occasion, price, link});
-  } else {
-    const isSugg = state.modalMode === 'suggest';
-    state.gifts.push({id:state.nextId++, personId:state.selectedPersonId, name, occasion, price, link, claimed:false, claimedBy:'', isSuggestion:isSugg, suggestedBy:isSugg?state.currentUser:''});
+  const name=document.getElementById('gift-name-input').value.trim(); if(!name) return;
+  const occasion=document.getElementById('gift-occasion-input').value;
+  const price=document.getElementById('gift-price-input').value.trim();
+  const link=document.getElementById('gift-link-input').value.trim();
+  if(state.editingGiftId) { Object.assign(state.gifts.find(g=>g.id===state.editingGiftId),{name,occasion,price,link}); }
+  else {
+    const isSugg=state.modalMode==='suggest';
+    state.gifts.push({id:state.nextId++,personId:state.selectedPersonId,name,occasion,price,link,claimed:false,claimedBy:'',isSuggestion:isSugg,suggestedBy:isSugg?state.currentUser:''});
   }
   save(); closeGiftModal(); renderPeopleGrid(); renderWishlist();
 }
 
 function renderOverview() {
-  const totalGifts = state.gifts.filter(g => !g.isSuggestion).length;
-  const totalClaimed = state.gifts.filter(g => g.claimed).length;
-  const rows = state.people.map(p => {
-    const gifts = state.gifts.filter(g => g.personId === p.id && !g.isSuggestion);
-    const claimed = gifts.filter(g => g.claimed).length;
-    const col = AVATAR_COLORS[p.color % AVATAR_COLORS.length];
-    const pct = gifts.length ? Math.round(claimed / gifts.length * 100) : 0;
+  const totalGifts=state.gifts.filter(g=>!g.isSuggestion).length, totalClaimed=state.gifts.filter(g=>g.claimed).length;
+  const rows=state.people.map(p=>{
+    const gifts=state.gifts.filter(g=>g.personId===p.id&&!g.isSuggestion), claimed=gifts.filter(g=>g.claimed).length;
+    const col=AVATAR_COLORS[p.color%AVATAR_COLORS.length], pct=gifts.length?Math.round(claimed/gifts.length*100):0;
     return `<div class="gift-item" style="align-items:center">
       <div class="avatar" style="background:${col.bg};color:${col.color};width:36px;height:36px;font-size:12px;flex-shrink:0">${getInitials(p.name)}</div>
-      <div class="gift-info">
-        <div class="gift-name">${p.name}</div>
-        <div class="gift-meta"><span style="font-size:12px;color:var(--color-text-secondary)">${gifts.length} wish${gifts.length!==1?'es':''} · ${claimed} claimed</span></div>
-      </div>
-      ${gifts.length > 0 ? `<div style="display:flex;gap:8px;align-items:center">
-        <div style="background:var(--color-background-secondary);border-radius:20px;height:8px;width:80px;overflow:hidden">
-          <div style="background:#D4537E;height:100%;width:${pct}%;border-radius:20px;transition:width 0.3s"></div>
-        </div>
-        <span style="font-size:12px;color:var(--color-text-secondary)">${pct}%</span>
-      </div>` : ''}
+      <div class="gift-info"><div class="gift-name">${p.name}</div><div class="gift-meta"><span style="font-size:12px;color:var(--color-text-secondary)">${gifts.length} wish${gifts.length!==1?'es':''} · ${claimed} claimed</span></div></div>
+      ${gifts.length?`<div style="display:flex;gap:8px;align-items:center"><div style="background:var(--color-background-secondary);border-radius:20px;height:8px;width:80px;overflow:hidden"><div style="background:#D4537E;height:100%;width:${pct}%;border-radius:20px"></div></div><span style="font-size:12px;color:var(--color-text-secondary)">${pct}%</span></div>`:''}
     </div>`;
   }).join('');
-  document.getElementById('overview-content').innerHTML = `
+  document.getElementById('overview-content').innerHTML=`
     <div class="stat-grid">
       <div class="stat-card"><div class="stat-label">Family members</div><div class="stat-value">${state.people.length}</div></div>
       <div class="stat-card"><div class="stat-label">Total wishes</div><div class="stat-value">${totalGifts}</div></div>
       <div class="stat-card"><div class="stat-label">Gifts claimed</div><div class="stat-value" style="color:#D4537E">${totalClaimed}</div></div>
     </div>
-    <h3 style="font-size:15px;font-weight:600;margin-bottom:0.75rem">Progress by person</h3>
-    ${rows}`;
+    <h3 style="font-size:15px;font-weight:600;margin-bottom:0.75rem">Progress by person</h3>${rows}`;
 }
 
-load();
+// ─── Boot ─────────────────────────────────────────────────────────────────────
+localLoad();
+const savedConfig = loadFirebaseConfig();
+if (savedConfig) initFirebase(savedConfig);
 </script>
 </body>
 </html>
