@@ -8,77 +8,51 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --color-background-primary: #ffffff;
-      --color-background-secondary: #f5f5f4;
-      --color-background-danger: #fef2f2;
-      --color-text-primary: #1c1917;
-      --color-text-secondary: #78716c;
-      --color-text-danger: #b91c1c;
-      --color-border-tertiary: #e7e5e4;
-      --color-border-secondary: #d6d3d1;
-      --color-border-danger: #fca5a5;
-      --border-radius-md: 8px;
-      --border-radius-lg: 12px;
-      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --color-background-primary: #ffffff; --color-background-secondary: #f5f5f4;
+      --color-background-danger: #fef2f2; --color-text-primary: #1c1917;
+      --color-text-secondary: #78716c; --color-text-danger: #b91c1c;
+      --color-border-tertiary: #e7e5e4; --color-border-secondary: #d6d3d1;
+      --color-border-danger: #fca5a5; --border-radius-md: 8px;
+      --border-radius-lg: 12px; --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
-
     @media (prefers-color-scheme: dark) {
       :root {
-        --color-background-primary: #1c1917;
-        --color-background-secondary: #292524;
-        --color-background-danger: #450a0a;
-        --color-text-primary: #fafaf9;
-        --color-text-secondary: #a8a29e;
-        --color-text-danger: #f87171;
-        --color-border-tertiary: #292524;
-        --color-border-secondary: #44403c;
+        --color-background-primary: #1c1917; --color-background-secondary: #292524;
+        --color-background-danger: #450a0a; --color-text-primary: #fafaf9;
+        --color-text-secondary: #a8a29e; --color-text-danger: #f87171;
+        --color-border-tertiary: #292524; --color-border-secondary: #44403c;
         --color-border-danger: #7f1d1d;
       }
     }
-
     body { font-family: var(--font-sans); background: var(--color-background-secondary); color: var(--color-text-primary); min-height: 100vh; }
-
-    input, select {
-      font-family: var(--font-sans); font-size: 14px; padding: 7px 10px;
-      border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md);
-      background: var(--color-background-primary); color: var(--color-text-primary); outline: none;
-    }
+    input, select { font-family: var(--font-sans); font-size: 14px; padding: 7px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary); outline: none; }
     input:focus, select:focus { border-color: #D4537E; box-shadow: 0 0 0 2px rgba(212,83,126,0.15); }
-
     #app { max-width: 800px; margin: 0 auto; min-height: 100vh; background: var(--color-background-secondary); }
-    .screen { display: none; }
-    .screen.active { display: block; }
+    .screen { display: none; } .screen.active { display: block; }
 
-    /* Sync status bar */
-    #sync-bar { display: none; align-items: center; gap: 6px; padding: 6px 1.25rem; font-size: 12px; background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); }
+    #sync-bar { display: none; align-items: center; gap: 6px; padding: 6px 1.25rem; font-size: 12px; border-bottom: 0.5px solid var(--color-border-tertiary); }
     #sync-bar.visible { display: flex; }
     #sync-bar.syncing { color: #854F0B; background: #FAEEDA; }
     #sync-bar.synced  { color: #3B6D11; background: #EAF3DE; }
     #sync-bar.error   { color: #A32D2D; background: #FCEBEB; }
     #sync-bar i { font-size: 14px; }
 
-    /* Login */
     #login-screen { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem; }
     #login-screen.active { display: flex; }
     .login-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 2.5rem 2rem; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 4px 24px rgba(0,0,0,0.07); }
     .login-icon { font-size: 40px; color: #D4537E; margin-bottom: 1rem; }
     .login-card h1 { font-size: 22px; font-weight: 600; margin-bottom: 0.25rem; }
-    .login-card > p { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 1.5rem; }
-
-    .login-field-label { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); text-align: left; display: block; margin-bottom: 5px; }
+    .login-card .subtitle { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 1.5rem; }
     .login-field { margin-bottom: 1rem; text-align: left; }
+    .login-field-label { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); display: block; margin-bottom: 5px; }
     .login-field input, .login-field select { width: 100%; }
     .login-field select { font-size: 15px; padding: 9px 10px; }
-
-    .person-option-row { display: flex; align-items: center; gap: 8px; }
-
+    .password-hint { font-size: 11px; color: var(--color-text-secondary); margin-top: 5px; font-style: italic; }
     .err { font-size: 12px; color: var(--color-text-danger); margin-bottom: 0.75rem; display: none; text-align: left; }
-    .btn-primary { width: 100%; padding: 10px 16px; background: #D4537E; color: white; border: none; border-radius: var(--border-radius-md); font-size: 15px; font-weight: 500; cursor: pointer; transition: background 0.15s; }
+    .btn-primary { width: 100%; padding: 10px 16px; background: #D4537E; color: white; border: none; border-radius: var(--border-radius-md); font-size: 15px; font-weight: 500; cursor: pointer; transition: background 0.15s; font-family: var(--font-sans); }
     .btn-primary:hover { background: #993556; }
 
-    /* Topbar */
     .topbar { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.25rem; border-bottom: 0.5px solid var(--color-border-tertiary); background: var(--color-background-primary); }
     .topbar-left { display: flex; align-items: center; gap: 8px; }
     .topbar-logo { font-size: 18px; color: #D4537E; }
@@ -95,8 +69,6 @@
     .tab-btn:hover:not(.active) { color: var(--color-text-primary); }
 
     .content { padding: 1.25rem; }
-
-    /* People grid */
     .people-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-bottom: 1.25rem; }
     .person-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem; cursor: pointer; text-align: center; transition: border-color 0.15s; position: relative; }
     .person-card:hover { border-color: var(--color-border-secondary); }
@@ -116,7 +88,6 @@
     .add-person-form .row { display: flex; gap: 8px; }
     .add-person-form input { flex: 1; }
 
-    /* Wishlist */
     .wishlist-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 8px; }
     .wishlist-header h3 { font-size: 15px; font-weight: 600; }
     .header-btns { display: flex; gap: 6px; }
@@ -158,7 +129,6 @@
     .empty-state { text-align: center; padding: 2rem 1rem; color: var(--color-text-secondary); font-size: 14px; }
     .empty-state i { font-size: 30px; display: block; margin-bottom: 0.5rem; }
 
-    /* Modals */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 100; align-items: center; justify-content: center; padding: 1rem; }
     .modal-overlay.open { display: flex; }
     .modal { background: var(--color-background-primary); border-radius: var(--border-radius-lg); padding: 1.5rem; width: 100%; max-width: 440px; border: 0.5px solid var(--color-border-secondary); box-shadow: 0 8px 40px rgba(0,0,0,0.15); }
@@ -189,8 +159,6 @@
     .stat-card { background: var(--color-background-primary); border-radius: var(--border-radius-md); padding: 1rem; text-align: center; border: 0.5px solid var(--color-border-tertiary); }
     .stat-label { font-size: 13px; color: var(--color-text-secondary); }
     .stat-value { font-size: 26px; font-weight: 600; margin-top: 4px; }
-
-    code { font-size: 12px; background: var(--color-background-secondary); padding: 1px 5px; border-radius: 4px; font-family: monospace; }
   </style>
 </head>
 <body>
@@ -201,7 +169,7 @@
     <div class="login-card">
       <div class="login-icon"><i class="ti ti-gift"></i></div>
       <h1>Kerckhoff Family Gift Manager</h1>
-      <p>Welcome! Who are you, and what's the password? (hint:Zach's fuzzy brother)</p>
+      <p class="subtitle">Welcome! Who are you, and what's the password?</p>
 
       <div class="login-field">
         <label class="login-field-label">I am…</label>
@@ -213,10 +181,11 @@
       <div class="login-field">
         <label class="login-field-label">Family password</label>
         <input type="password" id="pw-input" placeholder="Enter password" />
+        <p class="password-hint">Hint: Zach's fuzzy brother's name</p>
       </div>
 
-      <div class="err" id="pw-err">Incorrect password. Try again.</div>
       <div class="err" id="person-err">Please select your name.</div>
+      <div class="err" id="pw-err">Incorrect password. Try again.</div>
 
       <button class="btn-primary" onclick="doLogin()">Enter</button>
     </div>
@@ -228,7 +197,6 @@
       <i class="ti ti-cloud" id="sync-icon"></i>
       <span id="sync-text">Connecting…</span>
     </div>
-
     <div class="topbar">
       <div class="topbar-left">
         <span class="topbar-logo"><i class="ti ti-gift"></i></span>
@@ -237,16 +205,14 @@
       <div class="topbar-right">
         <span class="who-label">Viewing as:</span>
         <select class="who-select" id="current-user-select" onchange="setCurrentUser(this.value)"></select>
-        <button class="icon-btn-top" onclick="openHelp()" aria-label="Help" title="Help"><i class="ti ti-help-circle"></i></button>
-        <button class="icon-btn-top" onclick="logout()" aria-label="Log out" title="Log out"><i class="ti ti-logout"></i></button>
+        <button class="icon-btn-top" onclick="openHelp()" title="Help"><i class="ti ti-help-circle"></i></button>
+        <button class="icon-btn-top" onclick="logout()" title="Log out"><i class="ti ti-logout"></i></button>
       </div>
     </div>
-
     <div class="tabs">
       <button class="tab-btn active" onclick="switchTab('wishlists',this)"><i class="ti ti-list"></i> Wishlists</button>
       <button class="tab-btn" onclick="switchTab('overview',this)"><i class="ti ti-layout-grid"></i> Overview</button>
     </div>
-
     <div id="tab-wishlists" class="content">
       <div class="people-grid" id="people-grid"></div>
       <div class="add-person-form" id="add-person-form">
@@ -259,7 +225,6 @@
       </div>
       <div id="wishlist-area"></div>
     </div>
-
     <div id="tab-overview" class="content" style="display:none;">
       <div id="overview-content"></div>
     </div>
@@ -274,10 +239,10 @@
       <input type="text" id="gift-name-input" placeholder="e.g. LEGO Star Wars set" />
       <label>Occasion</label>
       <select id="gift-occasion-input">
-        <option value="birthday">🎂 Birthday</option>
-        <option value="christmas">🎄 Christmas</option>
-        <option value="hanukkah">🕎 Hanukkah</option>
-        <option value="other">🎁 Other</option>
+        <option value="birthday">Birthday</option>
+        <option value="christmas">Christmas</option>
+        <option value="hanukkah">Hanukkah</option>
+        <option value="other">Other</option>
       </select>
       <label>Price (optional)</label>
       <input type="text" id="gift-price-input" placeholder="e.g. $25" />
@@ -307,37 +272,32 @@
     <div class="modal help-modal">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
         <h3 style="margin:0">How to use this app</h3>
-        <button class="icon-btn" onclick="closeHelp()" aria-label="Close"><i class="ti ti-x"></i></button>
+        <button class="icon-btn" onclick="closeHelp()"><i class="ti ti-x"></i></button>
       </div>
       <div class="help-scroll">
         <div class="help-section">
           <h4><i class="ti ti-login"></i> Logging in</h4>
-          <p>Pick your name from the dropdown and enter the family password. The app will remember who you are and open your wishlist automatically.</p>
+          <p>Pick your name from the dropdown and enter the family password. The app opens your own wishlist automatically.</p>
         </div>
         <hr class="help-divider">
         <div class="help-section">
           <h4><i class="ti ti-list"></i> Your wishlist</h4>
-          <p>Your name card is selected automatically when you log in. Use "Add to my list" to add gifts you'd like to receive — including name, occasion, price, and a link. Edit or delete with the pencil and trash icons.</p>
+          <p>Your name card is selected when you log in. Use "Add to my list" to add gifts you'd like. Edit or delete with the pencil and trash icons. Gift ideas from other family members are hidden from you to keep surprises intact!</p>
         </div>
         <hr class="help-divider">
         <div class="help-section">
           <h4><i class="ti ti-check"></i> Claiming gifts</h4>
-          <p>Click another family member's name to see their wishlist. Check the box next to a gift to claim it — this prevents duplicates. The recipient cannot see who claimed their gifts.</p>
+          <p>Click another family member's name to see their wishlist. Check the box next to a gift to claim it — no duplicates. The recipient can't see who claimed their gifts.</p>
         </div>
         <hr class="help-divider">
         <div class="help-section">
           <h4><i class="ti ti-bulb"></i> Adding gift ideas for others</h4>
-          <p>When viewing someone else's list, click "Add gift idea" to suggest a gift. It shows up in a separate section marked with your name. They can dismiss ideas they don't want.</p>
+          <p>When viewing someone else's list, click "Add gift idea" to suggest a gift. It's visible to all other family members but hidden from the recipient — surprises safe!</p>
         </div>
         <hr class="help-divider">
         <div class="help-section">
           <h4><i class="ti ti-cloud"></i> Real-time sync</h4>
-          <p>The green bar at the top means all changes are syncing instantly across every family member's device. Everyone always sees the latest version.</p>
-        </div>
-        <hr class="help-divider">
-        <div class="help-section">
-          <h4><i class="ti ti-user-plus"></i> Managing family members</h4>
-          <p>Click "Add member" to add someone new. Hover over a card and click the X to remove them — this also removes all their wishlist items.</p>
+          <p>The green bar at the top means changes sync instantly across every family member's device.</p>
         </div>
         <hr class="help-divider">
         <div class="help-section">
@@ -353,13 +313,10 @@
 
 </div>
 
-<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-
 <script>
-// ─── CONFIGURATION — edit these two values ────────────────────────────────────
-
+// ─── CONFIGURATION ─────────────────────────────────────────────────────────
 const FAMILY_PASSWORD = 'Felix';
 
 const FIREBASE_CONFIG = {
@@ -372,8 +329,7 @@ const FIREBASE_CONFIG = {
   appId: "1:375441041038:web:b2c098d073cf06f9208bdf",
   measurementId: "G-4CFX454QH7"
 };
-
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────────────
 
 const AVATAR_COLORS = [
   {bg:'#FBEAF0',color:'#993556'},{bg:'#E6F1FB',color:'#185FA5'},
@@ -399,200 +355,166 @@ let state = {
   pendingDeletePersonId:null, modalMode:'own',
 };
 
-// ─── Firebase ────────────────────────────────────────────────────────────────
-
-let db = null;
-let syncDebounce = null;
+// ─── Firebase ───────────────────────────────────────────────────────────────
+let db = null, syncDebounce = null;
 
 function initFirebase() {
   try {
     firebase.initializeApp(FIREBASE_CONFIG);
     db = firebase.database();
-    setSyncStatus('syncing', 'Connecting…');
-    db.ref('giftmanager').on('value', snapshot => {
-      const data = snapshot.val();
+    setSyncStatus('syncing','Connecting…');
+    db.ref('giftmanager').on('value', snap => {
+      const data = snap.val();
       if (data) {
-        const cu = state.currentUser, sel = state.selectedPersonId, fil = state.filterOccasion;
+        const cu=state.currentUser, sel=state.selectedPersonId, fil=state.filterOccasion;
         state = Object.assign({}, state, {
-          people: data.people || state.people,
-          gifts: data.gifts || state.gifts,
-          nextId: data.nextId || state.nextId,
-          nextPersonId: data.nextPersonId || state.nextPersonId,
-          currentUser: cu, selectedPersonId: sel, filterOccasion: fil,
+          people: data.people||state.people, gifts: data.gifts||state.gifts,
+          nextId: data.nextId||state.nextId, nextPersonId: data.nextPersonId||state.nextPersonId,
+          currentUser:cu, selectedPersonId:sel, filterOccasion:fil,
         });
         localSave();
-        if (document.getElementById('main-screen').classList.contains('active')) {
-          renderUserSelect(); renderPeopleGrid(); renderWishlist();
-        }
-        // Also refresh login dropdown if login screen is visible
-        if (document.getElementById('login-screen').classList.contains('active')) {
-          populateLoginDropdown();
-        }
+        if (document.getElementById('main-screen').classList.contains('active')) { renderUserSelect(); renderPeopleGrid(); renderWishlist(); }
+        if (document.getElementById('login-screen').classList.contains('active')) { populateLoginDropdown(); }
       }
-      setSyncStatus('synced', 'Synced');
-    }, () => setSyncStatus('error', 'Sync error — check your connection'));
-  } catch(e) {
-    setSyncStatus('error', 'Could not connect to Firebase');
-  }
+      setSyncStatus('synced','Synced');
+    }, () => setSyncStatus('error','Sync error — check your connection'));
+  } catch(e) { setSyncStatus('error','Could not connect to Firebase'); }
 }
 
 function pushToFirebase() {
   if (!db) return;
-  setSyncStatus('syncing', 'Saving…');
+  setSyncStatus('syncing','Saving…');
   if (syncDebounce) clearTimeout(syncDebounce);
   syncDebounce = setTimeout(() => {
-    db.ref('giftmanager').set({
-      people: state.people, gifts: state.gifts,
-      nextId: state.nextId, nextPersonId: state.nextPersonId,
-    }).then(() => setSyncStatus('synced', 'Synced'))
-      .catch(() => setSyncStatus('error', 'Save failed'));
+    db.ref('giftmanager').set({people:state.people,gifts:state.gifts,nextId:state.nextId,nextPersonId:state.nextPersonId})
+      .then(()=>setSyncStatus('synced','Synced')).catch(()=>setSyncStatus('error','Save failed'));
   }, 400);
 }
 
-function setSyncStatus(type, text) {
-  const bar = document.getElementById('sync-bar');
-  bar.className = 'visible ' + type;
-  document.getElementById('sync-text').textContent = text;
-  document.getElementById('sync-icon').className =
-    type === 'syncing' ? 'ti ti-cloud-upload' :
-    type === 'error'   ? 'ti ti-cloud-off' : 'ti ti-cloud-check';
+function setSyncStatus(type,text) {
+  document.getElementById('sync-bar').className='visible '+type;
+  document.getElementById('sync-text').textContent=text;
+  document.getElementById('sync-icon').className=type==='syncing'?'ti ti-cloud-upload':type==='error'?'ti ti-cloud-off':'ti ti-cloud-check';
 }
 
-// ─── Local storage ────────────────────────────────────────────────────────────
-
-function localSave() {
-  try { localStorage.setItem('fgm_v3', JSON.stringify({people:state.people,gifts:state.gifts,nextId:state.nextId,nextPersonId:state.nextPersonId})); } catch(e){}
-}
-function localLoad() {
-  try { const s=localStorage.getItem('fgm_v3'); if(s){const d=JSON.parse(s);state.people=d.people||state.people;state.gifts=d.gifts||state.gifts;state.nextId=d.nextId||state.nextId;state.nextPersonId=d.nextPersonId||state.nextPersonId;} } catch(e){}
-}
+// ─── Storage ────────────────────────────────────────────────────────────────
+function localSave() { try{localStorage.setItem('fgm_v4',JSON.stringify({people:state.people,gifts:state.gifts,nextId:state.nextId,nextPersonId:state.nextPersonId}));}catch(e){} }
+function localLoad() { try{const s=localStorage.getItem('fgm_v4');if(s){const d=JSON.parse(s);state.people=d.people||state.people;state.gifts=d.gifts||state.gifts;state.nextId=d.nextId||state.nextId;state.nextPersonId=d.nextPersonId||state.nextPersonId;}}catch(e){} }
 function save() { localSave(); pushToFirebase(); }
 
-// ─── Login ────────────────────────────────────────────────────────────────────
-
+// ─── Login ──────────────────────────────────────────────────────────────────
 function populateLoginDropdown() {
-  const sel = document.getElementById('login-person-select');
-  const current = sel.value;
-  sel.innerHTML = '<option value="">— select your name —</option>' +
-    state.people.map(p => `<option value="${p.name}"${p.name===current?' selected':''}>${p.name}</option>`).join('');
+  const sel=document.getElementById('login-person-select'), cur=sel.value;
+  sel.innerHTML='<option value="">— select your name —</option>'+state.people.map(p=>`<option value="${p.name}"${p.name===cur?' selected':''}>${p.name}</option>`).join('');
 }
 
 function doLogin() {
-  const personName = document.getElementById('login-person-select').value;
-  const password   = document.getElementById('pw-input').value;
-  let ok = true;
-
-  document.getElementById('person-err').style.display = 'none';
-  document.getElementById('pw-err').style.display = 'none';
-
-  if (!personName) { document.getElementById('person-err').style.display = 'block'; ok = false; }
-  if (password !== FAMILY_PASSWORD) { document.getElementById('pw-err').style.display = 'block'; ok = false; }
-  if (!ok) return;
-
-  state.currentUser = personName;
-  // Auto-select that person's wishlist
-  const person = state.people.find(p => p.name === personName);
-  if (person) state.selectedPersonId = person.id;
-
+  const personName=document.getElementById('login-person-select').value;
+  const password=document.getElementById('pw-input').value;
+  let ok=true;
+  document.getElementById('person-err').style.display='none';
+  document.getElementById('pw-err').style.display='none';
+  if(!personName){document.getElementById('person-err').style.display='block';ok=false;}
+  if(password!==FAMILY_PASSWORD){document.getElementById('pw-err').style.display='block';ok=false;}
+  if(!ok) return;
+  state.currentUser=personName;
+  const person=state.people.find(p=>p.name===personName);
+  if(person) state.selectedPersonId=person.id;
   document.getElementById('login-screen').classList.remove('active');
   document.getElementById('main-screen').classList.add('active');
   renderApp();
 }
-
-document.getElementById('pw-input').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+document.getElementById('pw-input').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 
 function logout() {
   document.getElementById('main-screen').classList.remove('active');
   document.getElementById('login-screen').classList.add('active');
-  document.getElementById('pw-input').value = '';
-  document.getElementById('login-person-select').value = '';
+  document.getElementById('pw-input').value='';
+  document.getElementById('login-person-select').value='';
 }
 
-// ─── UI ───────────────────────────────────────────────────────────────────────
+// ─── UI ─────────────────────────────────────────────────────────────────────
+function openHelp(){document.getElementById('help-modal').classList.add('open');}
+function closeHelp(){document.getElementById('help-modal').classList.remove('open');}
+function setCurrentUser(n){state.currentUser=n;renderWishlist();}
 
-function openHelp() { document.getElementById('help-modal').classList.add('open'); }
-function closeHelp() { document.getElementById('help-modal').classList.remove('open'); }
-function setCurrentUser(n) { state.currentUser = n; renderWishlist(); }
-
-function switchTab(tab, btn) {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+function switchTab(tab,btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('tab-wishlists').style.display = tab==='wishlists'?'block':'none';
-  document.getElementById('tab-overview').style.display   = tab==='overview'?'block':'none';
-  if (tab==='overview') renderOverview();
+  document.getElementById('tab-wishlists').style.display=tab==='wishlists'?'block':'none';
+  document.getElementById('tab-overview').style.display=tab==='overview'?'block':'none';
+  if(tab==='overview') renderOverview();
 }
 
-function renderApp() { renderUserSelect(); renderPeopleGrid(); renderWishlist(); }
+function renderApp(){renderUserSelect();renderPeopleGrid();renderWishlist();}
 
-function renderUserSelect() {
-  document.getElementById('current-user-select').innerHTML =
-    state.people.map(p=>`<option value="${p.name}"${p.name===state.currentUser?' selected':''}>${p.name}</option>`).join('');
+function renderUserSelect(){
+  document.getElementById('current-user-select').innerHTML=state.people.map(p=>`<option value="${p.name}"${p.name===state.currentUser?' selected':''}>${p.name}</option>`).join('');
 }
 
-function getInitials(n) { return n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); }
+function getInitials(n){return n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);}
 
-function renderPeopleGrid() {
-  const cards = state.people.map(p => {
-    const col = AVATAR_COLORS[p.color%AVATAR_COLORS.length];
-    const cnt = state.gifts.filter(g=>g.personId===p.id).length;
+function renderPeopleGrid(){
+  const cards=state.people.map(p=>{
+    const col=AVATAR_COLORS[p.color%AVATAR_COLORS.length];
+    const cnt=state.gifts.filter(g=>g.personId===p.id).length;
     return `<div class="person-card${p.id===state.selectedPersonId?' selected':''}" onclick="selectPerson(${p.id})">
-      <button class="delete-person-btn" onclick="openDeletePerson(event,${p.id})" aria-label="Remove ${p.name}"><i class="ti ti-x"></i></button>
+      <button class="delete-person-btn" onclick="openDeletePerson(event,${p.id})"><i class="ti ti-x"></i></button>
       <div class="avatar" style="background:${col.bg};color:${col.color}">${getInitials(p.name)}</div>
       <div class="name">${p.name}</div>
       <div class="gift-count">${cnt} gift${cnt!==1?'s':''}</div>
     </div>`;
   }).join('');
-  document.getElementById('people-grid').innerHTML = cards +
-    `<div class="add-person-card" onclick="openAddPerson()"><i class="ti ti-user-plus" style="font-size:26px"></i><span>Add member</span></div>`;
+  document.getElementById('people-grid').innerHTML=cards+`<div class="add-person-card" onclick="openAddPerson()"><i class="ti ti-user-plus" style="font-size:26px"></i><span>Add member</span></div>`;
 }
 
-function selectPerson(id) { state.selectedPersonId=id; state.filterOccasion='all'; renderPeopleGrid(); renderWishlist(); }
-function openAddPerson() { document.getElementById('add-person-form').classList.add('open'); document.getElementById('new-person-name').focus(); }
-function closeAddPerson() { document.getElementById('add-person-form').classList.remove('open'); document.getElementById('new-person-name').value=''; }
-function saveNewPerson() {
-  const name = document.getElementById('new-person-name').value.trim(); if(!name) return;
-  const p = {id:state.nextPersonId++,name,color:state.people.length};
-  state.people.push(p); state.selectedPersonId=p.id;
-  save(); closeAddPerson(); populateLoginDropdown(); renderUserSelect(); renderPeopleGrid(); renderWishlist();
+function selectPerson(id){state.selectedPersonId=id;state.filterOccasion='all';renderPeopleGrid();renderWishlist();}
+function openAddPerson(){document.getElementById('add-person-form').classList.add('open');document.getElementById('new-person-name').focus();}
+function closeAddPerson(){document.getElementById('add-person-form').classList.remove('open');document.getElementById('new-person-name').value='';}
+function saveNewPerson(){
+  const name=document.getElementById('new-person-name').value.trim();if(!name)return;
+  const p={id:state.nextPersonId++,name,color:state.people.length};
+  state.people.push(p);state.selectedPersonId=p.id;
+  save();closeAddPerson();populateLoginDropdown();renderUserSelect();renderPeopleGrid();renderWishlist();
 }
 
-function openDeletePerson(e,id) {
+function openDeletePerson(e,id){
   e.stopPropagation();
-  const p=state.people.find(p=>p.id===id), cnt=state.gifts.filter(g=>g.personId===id).length;
+  const p=state.people.find(p=>p.id===id),cnt=state.gifts.filter(g=>g.personId===id).length;
   state.pendingDeletePersonId=id;
   document.getElementById('delete-person-text').innerHTML=`This will permanently remove <span class="confirm-name">${p.name}</span> and their ${cnt} gift wish${cnt!==1?'es':''} from the family list.`;
   document.getElementById('delete-person-modal').classList.add('open');
 }
-function closeDeletePersonModal() { document.getElementById('delete-person-modal').classList.remove('open'); state.pendingDeletePersonId=null; }
-function confirmDeletePerson() {
-  const id=state.pendingDeletePersonId; if(!id) return;
+function closeDeletePersonModal(){document.getElementById('delete-person-modal').classList.remove('open');state.pendingDeletePersonId=null;}
+function confirmDeletePerson(){
+  const id=state.pendingDeletePersonId;if(!id)return;
   const removed=state.people.find(p=>p.id===id)?.name;
   state.gifts=state.gifts.filter(g=>g.personId!==id);
   state.people=state.people.filter(p=>p.id!==id);
   if(state.selectedPersonId===id) state.selectedPersonId=state.people.length?state.people[0].id:null;
   if(state.currentUser===removed) state.currentUser=state.people.length?state.people[0].name:'';
-  closeDeletePersonModal(); save(); populateLoginDropdown(); renderUserSelect(); renderPeopleGrid(); renderWishlist();
+  closeDeletePersonModal();save();populateLoginDropdown();renderUserSelect();renderPeopleGrid();renderWishlist();
 }
 
-function renderWishlist() {
+function renderWishlist(){
   if(!state.selectedPersonId||!state.people.length){
-    document.getElementById('wishlist-area').innerHTML=`<div class="empty-state"><i class="ti ti-users"></i>Add a family member to get started.</div>`;
-    return;
+    document.getElementById('wishlist-area').innerHTML=`<div class="empty-state"><i class="ti ti-users"></i>Add a family member to get started.</div>`;return;
   }
-  const person=state.people.find(p=>p.id===state.selectedPersonId); if(!person) return;
+  const person=state.people.find(p=>p.id===state.selectedPersonId);if(!person)return;
   const isOwnList=person.name===state.currentUser;
+
   let allGifts=state.gifts.filter(g=>g.personId===state.selectedPersonId);
   if(state.filterOccasion!=='all') allGifts=allGifts.filter(g=>g.occasion===state.filterOccasion);
 
   const filters=['all','birthday','christmas','hanukkah','other'];
   const filterHTML=`<div class="filter-row">${filters.map(f=>`<button class="filter-chip${state.filterOccasion===f?' active':''}" onclick="setFilter('${f}')">${f==='all'?'All':f.charAt(0).toUpperCase()+f.slice(1)}</button>`).join('')}</div>`;
 
-  function giftCard(g) {
+  function giftCard(g){
     const canClaim=!isOwnList&&!g.isSuggestion;
     const claimBox=canClaim?`<input type="checkbox" class="gift-check"${g.claimed?' checked':''} onchange="toggleClaim(${g.id},this.checked)">`:`<span style="width:15px;flex-shrink:0;display:inline-block"></span>`;
     let actions='';
-    if(isOwnList&&!g.isSuggestion) actions=`<div class="gift-actions"><button class="icon-btn" onclick="openEditGift(${g.id})" title="Edit"><i class="ti ti-edit"></i></button><button class="icon-btn danger" onclick="deleteGift(${g.id})" title="Delete"><i class="ti ti-trash"></i></button></div>`;
-    else actions=`<div class="gift-actions"><button class="icon-btn danger" onclick="deleteGift(${g.id})" title="Remove"><i class="ti ti-trash"></i></button></div>`;
+    if(isOwnList&&!g.isSuggestion) actions=`<div class="gift-actions"><button class="icon-btn" onclick="openEditGift(${g.id})"><i class="ti ti-edit"></i></button><button class="icon-btn danger" onclick="deleteGift(${g.id})"><i class="ti ti-trash"></i></button></div>`;
+    else actions=`<div class="gift-actions"><button class="icon-btn danger" onclick="deleteGift(${g.id})"><i class="ti ti-trash"></i></button></div>`;
     return `<div class="gift-item${g.claimed?' claimed':''}${g.isSuggestion?' suggestion':''}">
       ${claimBox}
       <div class="gift-info">
@@ -609,37 +531,40 @@ function renderWishlist() {
     </div>`;
   }
 
-  const wishGifts=allGifts.filter(g=>!g.isSuggestion), ideaGifts=allGifts.filter(g=>g.isSuggestion);
+  const wishGifts=allGifts.filter(g=>!g.isSuggestion);
+  // Gift ideas are NEVER shown to the recipient — only visible when viewing someone else's list
+  const ideaGifts=isOwnList?[]:allGifts.filter(g=>g.isSuggestion);
+
   const wishHTML=wishGifts.length?wishGifts.map(giftCard).join(''):`<div class="empty-state" style="padding:1rem"><i class="ti ti-gift"></i>${isOwnList?'Add gifts to your wishlist above.':'No wishlist items yet.'}</div>`;
-  const ideaHTML=ideaGifts.length?ideaGifts.map(giftCard).join(''):`<div style="font-size:13px;color:var(--color-text-secondary);padding:0.5rem 0">${isOwnList?'No ideas from family yet.':'No ideas added yet — add one above!'}</div>`;
   const btns=isOwnList
     ?`<div class="header-btns"><button class="btn-outline" onclick="openAddGift()"><i class="ti ti-plus"></i> Add to my list</button></div>`
     :`<div class="header-btns"><button class="btn-outline pink" onclick="openSuggestGift()"><i class="ti ti-bulb"></i> Add gift idea</button></div>`;
 
+  // Ideas section only appears when viewing someone else
+  const ideasSection=isOwnList?'':(`<div class="section-label">Your gift ideas for ${person.name}</div>`+(ideaGifts.length?ideaGifts.map(giftCard).join(''):`<div style="font-size:13px;color:var(--color-text-secondary);padding:0.5rem 0">No ideas added yet — add one above!</div>`));
+
   document.getElementById('wishlist-area').innerHTML=`
     <div class="wishlist-header"><h3>${isOwnList?'My wishlist':`${person.name}'s wishlist`}</h3>${btns}</div>
-    ${filterHTML}${wishHTML}
-    <div class="section-label">${isOwnList?'Gift ideas from family':'Your gift ideas for '+person.name}</div>
-    ${ideaHTML}`;
+    ${filterHTML}${wishHTML}${ideasSection}`;
 }
 
-function setFilter(f) { state.filterOccasion=f; renderWishlist(); }
+function setFilter(f){state.filterOccasion=f;renderWishlist();}
 
-function toggleClaim(giftId,checked) {
-  const g=state.gifts.find(g=>g.id===giftId); if(!g) return;
-  g.claimed=checked; g.claimedBy=checked?state.currentUser:'';
-  save(); renderPeopleGrid(); renderWishlist();
+function toggleClaim(giftId,checked){
+  const g=state.gifts.find(g=>g.id===giftId);if(!g)return;
+  g.claimed=checked;g.claimedBy=checked?state.currentUser:'';
+  save();renderPeopleGrid();renderWishlist();
 }
-function deleteGift(id) { state.gifts=state.gifts.filter(g=>g.id!==id); save(); renderPeopleGrid(); renderWishlist(); }
+function deleteGift(id){state.gifts=state.gifts.filter(g=>g.id!==id);save();renderPeopleGrid();renderWishlist();}
 
-function openGiftModal(mode,giftId) {
-  state.modalMode=mode; state.editingGiftId=giftId||null;
+function openGiftModal(mode,giftId){
+  state.modalMode=mode;state.editingGiftId=giftId||null;
   const person=state.people.find(p=>p.id===state.selectedPersonId);
   ['gift-name-input','gift-price-input','gift-link-input'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('gift-occasion-input').value='christmas';
-  if(mode==='own'&&!giftId){ document.getElementById('modal-title').textContent='Add to my wishlist'; document.getElementById('modal-sub').textContent=''; }
+  if(mode==='own'&&!giftId){document.getElementById('modal-title').textContent='Add to my wishlist';document.getElementById('modal-sub').textContent='';}
   else if(mode==='own'&&giftId){
-    document.getElementById('modal-title').textContent='Edit gift'; document.getElementById('modal-sub').textContent='';
+    document.getElementById('modal-title').textContent='Edit gift';document.getElementById('modal-sub').textContent='';
     const g=state.gifts.find(g=>g.id===giftId);
     document.getElementById('gift-name-input').value=g.name;
     document.getElementById('gift-occasion-input').value=g.occasion;
@@ -647,33 +572,33 @@ function openGiftModal(mode,giftId) {
     document.getElementById('gift-link-input').value=g.link;
   } else if(mode==='suggest'){
     document.getElementById('modal-title').textContent=`Add a gift idea for ${person.name}`;
-    document.getElementById('modal-sub').textContent=`This will appear as a suggestion on ${person.name}'s list — they can see it, but it's marked as coming from you.`;
+    document.getElementById('modal-sub').textContent=`Visible to all other family members — ${person.name} won't see it.`;
   }
   document.getElementById('gift-modal').classList.add('open');
 }
-function openAddGift() { openGiftModal('own',null); }
-function openSuggestGift() { openGiftModal('suggest',null); }
-function openEditGift(id) { openGiftModal('own',id); }
-function closeGiftModal() { document.getElementById('gift-modal').classList.remove('open'); }
+function openAddGift(){openGiftModal('own',null);}
+function openSuggestGift(){openGiftModal('suggest',null);}
+function openEditGift(id){openGiftModal('own',id);}
+function closeGiftModal(){document.getElementById('gift-modal').classList.remove('open');}
 
-function saveGift() {
-  const name=document.getElementById('gift-name-input').value.trim(); if(!name) return;
+function saveGift(){
+  const name=document.getElementById('gift-name-input').value.trim();if(!name)return;
   const occasion=document.getElementById('gift-occasion-input').value;
   const price=document.getElementById('gift-price-input').value.trim();
   const link=document.getElementById('gift-link-input').value.trim();
-  if(state.editingGiftId) { Object.assign(state.gifts.find(g=>g.id===state.editingGiftId),{name,occasion,price,link}); }
-  else {
+  if(state.editingGiftId){Object.assign(state.gifts.find(g=>g.id===state.editingGiftId),{name,occasion,price,link});}
+  else{
     const isSugg=state.modalMode==='suggest';
     state.gifts.push({id:state.nextId++,personId:state.selectedPersonId,name,occasion,price,link,claimed:false,claimedBy:'',isSuggestion:isSugg,suggestedBy:isSugg?state.currentUser:''});
   }
-  save(); closeGiftModal(); renderPeopleGrid(); renderWishlist();
+  save();closeGiftModal();renderPeopleGrid();renderWishlist();
 }
 
-function renderOverview() {
-  const totalGifts=state.gifts.filter(g=>!g.isSuggestion).length, totalClaimed=state.gifts.filter(g=>g.claimed).length;
+function renderOverview(){
+  const totalGifts=state.gifts.filter(g=>!g.isSuggestion).length,totalClaimed=state.gifts.filter(g=>g.claimed).length;
   const rows=state.people.map(p=>{
-    const gifts=state.gifts.filter(g=>g.personId===p.id&&!g.isSuggestion), claimed=gifts.filter(g=>g.claimed).length;
-    const col=AVATAR_COLORS[p.color%AVATAR_COLORS.length], pct=gifts.length?Math.round(claimed/gifts.length*100):0;
+    const gifts=state.gifts.filter(g=>g.personId===p.id&&!g.isSuggestion),claimed=gifts.filter(g=>g.claimed).length;
+    const col=AVATAR_COLORS[p.color%AVATAR_COLORS.length],pct=gifts.length?Math.round(claimed/gifts.length*100):0;
     return `<div class="gift-item" style="align-items:center">
       <div class="avatar" style="background:${col.bg};color:${col.color};width:36px;height:36px;font-size:12px;flex-shrink:0">${getInitials(p.name)}</div>
       <div class="gift-info"><div class="gift-name">${p.name}</div><div class="gift-meta"><span style="font-size:12px;color:var(--color-text-secondary)">${gifts.length} wish${gifts.length!==1?'es':''} · ${claimed} claimed</span></div></div>
@@ -689,7 +614,7 @@ function renderOverview() {
     <h3 style="font-size:15px;font-weight:600;margin-bottom:0.75rem">Progress by person</h3>${rows}`;
 }
 
-// ─── Boot ─────────────────────────────────────────────────────────────────────
+// ─── Boot ───────────────────────────────────────────────────────────────────
 localLoad();
 populateLoginDropdown();
 initFirebase();
