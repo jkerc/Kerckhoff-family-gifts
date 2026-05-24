@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,187 +9,251 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --color-background-primary: #ffffff; --color-background-secondary: #f5f5f4;
-      --color-background-danger: #fef2f2; --color-text-primary: #1c1917;
-      --color-text-secondary: #78716c; --color-text-danger: #b91c1c;
-      --color-border-tertiary: #e7e5e4; --color-border-secondary: #d6d3d1;
-      --color-border-danger: #fca5a5; --border-radius-md: 8px;
-      --border-radius-lg: 12px; --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --bg: #ffffff; --bg2: #f5f5f4; --bg3: #eeedec;
+      --text: #1c1917; --text2: #78716c; --text3: #a8a29e;
+      --border: #e7e5e4; --border2: #d6d3d1;
+      --pink: #D4537E; --pink-dark: #993556; --pink-light: #FBEAF0;
+      --danger: #b91c1c; --danger-bg: #fef2f2; --danger-border: #fca5a5;
+      --green-text: #3B6D11; --green-bg: #EAF3DE;
+      --amber-text: #854F0B; --amber-bg: #FAEEDA;
+      --blue-text: #185FA5; --blue-bg: #E6F1FB;
+      --purple-text: #3C3489; --purple-bg: #EEEDFE;
+      --r-md: 6px; --r-lg: 10px;
+      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --color-background-primary: #1c1917; --color-background-secondary: #292524;
-        --color-background-danger: #450a0a; --color-text-primary: #fafaf9;
-        --color-text-secondary: #a8a29e; --color-text-danger: #f87171;
-        --color-border-tertiary: #292524; --color-border-secondary: #44403c;
-        --color-border-danger: #7f1d1d;
+        --bg: #1c1917; --bg2: #292524; --bg3: #343130;
+        --text: #fafaf9; --text2: #a8a29e; --text3: #78716c;
+        --border: #292524; --border2: #44403c;
+        --pink-light: #3d1f2b;
+        --danger: #f87171; --danger-bg: #450a0a; --danger-border: #7f1d1d;
+        --green-text: #86efac; --green-bg: #14532d;
+        --amber-text: #fcd34d; --amber-bg: #451a03;
+        --blue-text: #93c5fd; --blue-bg: #1e3a5f;
+        --purple-text: #c4b5fd; --purple-bg: #2e1065;
       }
     }
-    body { font-family: var(--font-sans); background: var(--color-background-secondary); color: var(--color-text-primary); min-height: 100vh; }
-    input, select, textarea { font-family: var(--font-sans); font-size: 14px; padding: 7px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary); outline: none; }
-    input:focus, select:focus, textarea:focus { border-color: #D4537E; box-shadow: 0 0 0 2px rgba(212,83,126,0.15); }
-    textarea { resize: vertical; width: 100%; min-height: 70px; line-height: 1.5; }
-    #app { max-width: 800px; margin: 0 auto; min-height: 100vh; background: var(--color-background-secondary); }
+    body { font-family: var(--font); background: var(--bg2); color: var(--text); min-height: 100vh; font-size: 13px; }
+    input, select, textarea { font-family: var(--font); font-size: 13px; padding: 6px 9px; border: 0.5px solid var(--border2); border-radius: var(--r-md); background: var(--bg); color: var(--text); outline: none; }
+    input:focus, select:focus, textarea:focus { border-color: var(--pink); box-shadow: 0 0 0 2px rgba(212,83,126,0.15); }
+    textarea { resize: vertical; width: 100%; min-height: 64px; line-height: 1.5; }
+    button { font-family: var(--font); cursor: pointer; }
+
+    /* ── Layout ── */
+    #app { max-width: 1100px; margin: 0 auto; min-height: 100vh; }
     .screen { display: none; } .screen.active { display: block; }
 
-    #sync-bar { display: none; align-items: center; gap: 6px; padding: 6px 1.25rem; font-size: 12px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+    /* ── Sync bar ── */
+    #sync-bar { display: none; align-items: center; gap: 6px; padding: 5px 1rem; font-size: 11px; border-bottom: 0.5px solid var(--border); }
     #sync-bar.visible { display: flex; }
-    #sync-bar.syncing { color: #854F0B; background: #FAEEDA; }
-    #sync-bar.synced  { color: #3B6D11; background: #EAF3DE; }
-    #sync-bar.error   { color: #A32D2D; background: #FCEBEB; }
-    #sync-bar i { font-size: 14px; }
+    #sync-bar.syncing { color: var(--amber-text); background: var(--amber-bg); }
+    #sync-bar.synced  { color: var(--green-text);  background: var(--green-bg); }
+    #sync-bar.error   { color: var(--danger);       background: var(--danger-bg); }
 
+    /* ── Login ── */
     #login-screen { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem; }
     #login-screen.active { display: flex; }
-    .login-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 2.5rem 2rem; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 4px 24px rgba(0,0,0,0.07); }
-    .login-icon { font-size: 40px; color: #D4537E; margin-bottom: 1rem; }
-    .login-card h1 { font-size: 22px; font-weight: 600; margin-bottom: 0.25rem; }
-    .login-card .subtitle { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 1.5rem; }
-    .login-field { margin-bottom: 1rem; text-align: left; }
-    .login-field-label { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); display: block; margin-bottom: 5px; }
+    .login-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--r-lg); padding: 2.5rem 2rem; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 4px 24px rgba(0,0,0,0.07); }
+    .login-icon { font-size: 36px; color: var(--pink); margin-bottom: 0.75rem; }
+    .login-card h1 { font-size: 20px; font-weight: 600; margin-bottom: 0.2rem; }
+    .login-card .subtitle { font-size: 12px; color: var(--text2); margin-bottom: 1.25rem; }
+    .login-field { margin-bottom: 0.85rem; text-align: left; }
+    .login-field label { font-size: 12px; font-weight: 500; color: var(--text2); display: block; margin-bottom: 4px; }
     .login-field input, .login-field select { width: 100%; }
-    .login-field select { font-size: 15px; padding: 9px 10px; }
-    .password-hint { font-size: 11px; color: var(--color-text-secondary); margin-top: 5px; font-style: italic; }
-    .err { font-size: 12px; color: var(--color-text-danger); margin-bottom: 0.75rem; display: none; text-align: left; }
-    .btn-primary { width: 100%; padding: 10px 16px; background: #D4537E; color: white; border: none; border-radius: var(--border-radius-md); font-size: 15px; font-weight: 500; cursor: pointer; transition: background 0.15s; font-family: var(--font-sans); }
-    .btn-primary:hover { background: #993556; }
+    .pw-hint { font-size: 11px; color: var(--text3); margin-top: 4px; font-style: italic; }
+    .err { font-size: 11px; color: var(--danger); margin-bottom: 0.6rem; display: none; text-align: left; }
+    .btn-primary { width: 100%; padding: 9px; background: var(--pink); color: #fff; border: none; border-radius: var(--r-md); font-size: 14px; font-weight: 500; transition: background .15s; }
+    .btn-primary:hover { background: var(--pink-dark); }
 
-    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.25rem; border-bottom: 0.5px solid var(--color-border-tertiary); background: var(--color-background-primary); }
+    /* ── Topbar ── */
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 1rem; border-bottom: 0.5px solid var(--border); background: var(--bg); gap: 8px; flex-wrap: wrap; }
     .topbar-left { display: flex; align-items: center; gap: 8px; }
-    .topbar-logo { font-size: 18px; color: #D4537E; }
-    .topbar h2 { font-size: 15px; font-weight: 600; }
-    .topbar-right { display: flex; align-items: center; gap: 6px; }
-    .who-label { font-size: 13px; color: var(--color-text-secondary); }
-    .who-select { font-size: 13px; padding: 4px 8px; }
-    .icon-btn-top { background: none; border: none; cursor: pointer; color: var(--color-text-secondary); padding: 5px; border-radius: var(--border-radius-md); font-size: 20px; line-height: 1; display: flex; align-items: center; transition: background 0.15s; }
-    .icon-btn-top:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
+    .topbar-logo { font-size: 16px; color: var(--pink); }
+    .topbar h2 { font-size: 14px; font-weight: 600; white-space: nowrap; }
+    .topbar-right { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .who-label { font-size: 12px; color: var(--text2); white-space: nowrap; }
+    .who-select { font-size: 12px; padding: 4px 7px; }
+    .icon-btn-top { background: none; border: none; color: var(--text2); padding: 4px; border-radius: var(--r-md); font-size: 18px; line-height: 1; display: flex; align-items: center; transition: background .15s; }
+    .icon-btn-top:hover { background: var(--bg2); color: var(--text); }
 
-    .tabs { display: flex; border-bottom: 0.5px solid var(--color-border-tertiary); background: var(--color-background-primary); padding: 0 1.25rem; }
-    .tab-btn { padding: 0.6rem 1rem; font-size: 13px; background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; color: var(--color-text-secondary); margin-bottom: -0.5px; transition: color 0.15s; }
-    .tab-btn.active { color: #D4537E; border-bottom-color: #D4537E; font-weight: 500; }
-    .tab-btn:hover:not(.active) { color: var(--color-text-primary); }
+    /* ── Person tabs (horizontal pill tabs) ── */
+    .person-tabs-wrap { background: var(--bg); border-bottom: 0.5px solid var(--border); padding: 0 1rem; display: flex; align-items: center; gap: 0; overflow-x: auto; }
+    .person-tab { display: flex; align-items: center; gap: 6px; padding: 0.55rem 0.9rem; font-size: 12px; font-weight: 500; background: none; border: none; border-bottom: 2px solid transparent; color: var(--text2); white-space: nowrap; margin-bottom: -0.5px; transition: color .15s; position: relative; }
+    .person-tab:hover { color: var(--text); }
+    .person-tab.active { color: var(--pink); border-bottom-color: var(--pink); }
+    .person-tab .tab-avatar { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; flex-shrink: 0; }
+    .person-tab .tab-count { font-size: 10px; background: var(--bg2); border-radius: 10px; padding: 1px 5px; color: var(--text2); }
+    .person-tab.active .tab-count { background: var(--pink-light); color: var(--pink-dark); }
+    .person-tab-del { position: absolute; top: 4px; right: 2px; background: none; border: none; font-size: 11px; color: var(--text3); padding: 1px 3px; border-radius: 3px; display: none; line-height: 1; }
+    .person-tab:hover .person-tab-del { display: block; }
+    .person-tab-del:hover { color: var(--danger); background: var(--danger-bg); }
+    .add-person-tab { display: flex; align-items: center; gap: 4px; padding: 0.55rem 0.75rem; font-size: 12px; color: var(--text3); background: none; border: none; border-bottom: 2px solid transparent; white-space: nowrap; margin-bottom: -0.5px; }
+    .add-person-tab:hover { color: var(--pink); }
 
-    .content { padding: 1.25rem; }
-    .people-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-bottom: 1.25rem; }
-    .person-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem; cursor: pointer; text-align: center; transition: border-color 0.15s; position: relative; }
-    .person-card:hover { border-color: var(--color-border-secondary); }
-    .person-card.selected { border: 2px solid #D4537E; }
-    .avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; margin: 0 auto 0.5rem; }
-    .person-card .name { font-size: 13px; font-weight: 500; }
-    .person-card .gift-count { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
-    .delete-person-btn { position: absolute; top: 6px; right: 6px; background: none; border: none; cursor: pointer; color: var(--color-text-secondary); font-size: 14px; padding: 2px 4px; border-radius: 4px; display: none; line-height: 1; }
-    .person-card:hover .delete-person-btn { display: block; }
-    .delete-person-btn:hover { color: #A32D2D; background: var(--color-background-secondary); }
-    .add-person-card { background: var(--color-background-primary); border: 0.5px dashed var(--color-border-secondary); border-radius: var(--border-radius-lg); padding: 1rem; text-align: center; cursor: pointer; color: var(--color-text-secondary); font-size: 13px; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: border-color 0.15s, color 0.15s; }
-    .add-person-card:hover { border-color: #D4537E; color: #D4537E; }
+    /* ── Section tabs (Wishlists / Overview) ── */
+    .section-tabs { display: flex; background: var(--bg2); border-bottom: 0.5px solid var(--border); padding: 0 1rem; gap: 0; }
+    .section-tab { padding: 0.45rem 0.85rem; font-size: 12px; background: none; border: none; border-bottom: 2px solid transparent; color: var(--text2); margin-bottom: -0.5px; transition: color .15s; }
+    .section-tab.active { color: var(--pink); border-bottom-color: var(--pink); font-weight: 500; }
+    .section-tab:hover:not(.active) { color: var(--text); }
 
-    .add-person-form { display: none; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem; margin-bottom: 1rem; }
-    .add-person-form.open { display: block; }
-    .add-person-form label { font-size: 13px; color: var(--color-text-secondary); display: block; margin-bottom: 6px; font-weight: 500; }
-    .add-person-form .row { display: flex; gap: 8px; }
-    .add-person-form input { flex: 1; }
+    /* ── Table toolbar ── */
+    .table-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 1rem; gap: 8px; flex-wrap: wrap; border-bottom: 0.5px solid var(--border); background: var(--bg); }
+    .toolbar-left { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .toolbar-right { display: flex; align-items: center; gap: 6px; }
+    .toolbar-title { font-size: 13px; font-weight: 600; }
 
-    .wishlist-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 8px; }
-    .wishlist-header h3 { font-size: 15px; font-weight: 600; }
-    .header-btns { display: flex; gap: 6px; flex-wrap: wrap; }
-    .btn-outline { display: flex; align-items: center; gap: 4px; padding: 6px 12px; font-size: 13px; background: none; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); cursor: pointer; color: var(--color-text-primary); transition: background 0.15s; font-family: var(--font-sans); }
-    .btn-outline:hover { background: var(--color-background-secondary); }
-    .btn-outline.pink { border-color: #D4537E; color: #D4537E; }
-    .btn-outline.pink:hover { background: #FBEAF0; }
-    .btn-outline.muted { color: var(--color-text-secondary); font-size: 12px; padding: 5px 10px; }
+    /* Filter chips */
+    .fchip { font-size: 11px; padding: 3px 9px; border: 0.5px solid var(--border2); border-radius: 20px; background: none; color: var(--text2); transition: all .15s; }
+    .fchip.active { background: var(--pink); color: #fff; border-color: var(--pink); }
+    .fchip:hover:not(.active) { border-color: var(--pink); color: var(--pink); }
 
-    .filter-row { display: flex; gap: 6px; margin-bottom: 1rem; flex-wrap: wrap; }
-    .filter-chip { font-size: 12px; padding: 4px 12px; border: 0.5px solid var(--color-border-secondary); border-radius: 20px; background: none; cursor: pointer; color: var(--color-text-secondary); font-family: var(--font-sans); transition: all 0.15s; }
-    .filter-chip.active { background: #D4537E; color: white; border-color: #D4537E; }
-    .filter-chip:hover:not(.active) { border-color: #D4537E; color: #D4537E; }
+    /* Action buttons */
+    .btn-sm { display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px; font-size: 12px; border-radius: var(--r-md); border: 0.5px solid var(--border2); background: none; color: var(--text); transition: background .15s; }
+    .btn-sm:hover { background: var(--bg2); }
+    .btn-sm.pink { border-color: var(--pink); color: var(--pink); }
+    .btn-sm.pink:hover { background: var(--pink-light); }
+    .btn-sm.solid { background: var(--pink); color: #fff; border-color: var(--pink); }
+    .btn-sm.solid:hover { background: var(--pink-dark); }
 
-    /* Gift cards */
-    .gift-item { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 0.75rem 1rem; margin-bottom: 8px; display: flex; align-items: flex-start; gap: 10px; }
-    .gift-item.claimed { opacity: 0.6; }
-    .gift-item.suggestion { border-style: dashed; background: var(--color-background-secondary); }
-    .gift-item.archived { opacity: 0.55; background: var(--color-background-secondary); border-style: dotted; }
-    .gift-check { margin-top: 3px; accent-color: #D4537E; cursor: pointer; flex-shrink: 0; width: 15px; height: 15px; }
-    .gift-info { flex: 1; min-width: 0; }
-    .gift-name { font-size: 14px; font-weight: 500; }
-    .gift-name.claimed-text { text-decoration: line-through; color: var(--color-text-secondary); }
-    .gift-name.archived-text { text-decoration: line-through; color: var(--color-text-secondary); font-style: italic; }
-    .gift-meta { display: flex; align-items: center; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
-    .tag { font-size: 11px; padding: 2px 8px; border-radius: 20px; background: #FBEAF0; color: #993556; }
-    .tag.birthday { background: #FAEEDA; color: #854F0B; }
-    .tag.christmas { background: #EAF3DE; color: #3B6D11; }
-    .tag.hanukkah { background: #E6F1FB; color: #185FA5; }
-    .tag.other { background: #F1EFE8; color: #5F5E5A; }
-    .tag.idea { background: #EEEDFE; color: #3C3489; }
-    .tag.archived-tag { background: var(--color-background-secondary); color: var(--color-text-secondary); border: 0.5px solid var(--color-border-secondary); }
-    .price-tag { font-size: 11px; color: var(--color-text-secondary); }
-    .gift-link { font-size: 11px; color: #185FA5; text-decoration: none; }
-    .gift-link:hover { text-decoration: underline; }
-    .suggested-by { font-size: 11px; color: #534AB7; font-style: italic; }
-    .claimed-by { font-size: 11px; color: var(--color-text-secondary); font-style: italic; }
-    .gift-comment { font-size: 12px; color: var(--color-text-secondary); margin-top: 5px; line-height: 1.5; font-style: italic; border-left: 2px solid var(--color-border-secondary); padding-left: 8px; }
-    .gift-actions { display: flex; gap: 4px; flex-shrink: 0; }
-    .icon-btn { background: none; border: none; cursor: pointer; color: var(--color-text-secondary); padding: 4px; border-radius: 4px; font-size: 17px; line-height: 1; transition: background 0.15s, color 0.15s; }
-    .icon-btn:hover { color: var(--color-text-primary); background: var(--color-background-secondary); }
-    .icon-btn.danger:hover { color: #A32D2D; background: var(--color-background-danger); }
-    .icon-btn.archive-btn:hover { color: #854F0B; background: #FAEEDA; }
+    /* Show archive toggle */
+    .archive-toggle { font-size: 11px; color: var(--blue-text); background: none; border: none; padding: 4px 6px; border-radius: var(--r-md); }
+    .archive-toggle:hover { background: var(--blue-bg); }
 
-    .section-label { font-size: 11px; font-weight: 600; color: var(--color-text-secondary); margin: 1.25rem 0 0.5rem; text-transform: uppercase; letter-spacing: 0.06em; display: flex; align-items: center; gap: 8px; }
-    .section-toggle { font-size: 11px; font-weight: 400; color: #185FA5; cursor: pointer; text-transform: none; letter-spacing: 0; }
-    .section-toggle:hover { text-decoration: underline; }
-    .empty-state { text-align: center; padding: 2rem 1rem; color: var(--color-text-secondary); font-size: 14px; }
-    .empty-state i { font-size: 30px; display: block; margin-bottom: 0.5rem; }
+    /* ── Gift Table ── */
+    .gift-table-wrap { overflow-x: auto; background: var(--bg); }
+    table.gift-table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; }
+    table.gift-table th {
+      padding: 6px 8px; text-align: left; font-size: 11px; font-weight: 600;
+      color: var(--text2); background: var(--bg2);
+      border-bottom: 0.5px solid var(--border2);
+      position: sticky; top: 0; z-index: 2;
+      white-space: nowrap; user-select: none;
+    }
+    table.gift-table th.sortable { cursor: pointer; }
+    table.gift-table th.sortable:hover { color: var(--text); }
+    table.gift-table th .sort-icon { font-size: 10px; margin-left: 2px; opacity: 0.4; }
+    table.gift-table th.sort-asc .sort-icon,
+    table.gift-table th.sort-desc .sort-icon { opacity: 1; color: var(--pink); }
+    table.gift-table td { padding: 6px 8px; border-bottom: 0.5px solid var(--border); vertical-align: middle; }
+    table.gift-table tr:last-child td { border-bottom: none; }
+    table.gift-table tr:hover td { background: var(--bg2); }
+    table.gift-table tr.row-claimed td { opacity: 0.55; }
+    table.gift-table tr.row-archived td { opacity: 0.45; background: var(--bg2); font-style: italic; }
+    table.gift-table tr.row-idea td { background: color-mix(in srgb, var(--purple-bg) 25%, var(--bg)); }
+    table.gift-table tr.row-idea:hover td { background: color-mix(in srgb, var(--purple-bg) 45%, var(--bg)); }
 
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 100; align-items: center; justify-content: center; padding: 1rem; }
+    /* Column widths */
+    .col-claim   { width: 30px; text-align: center; }
+    .col-name    { width: 160px; min-width: 120px; }
+    .col-occ     { width: 88px; }
+    .col-price   { width: 66px; }
+    .col-claimed { width: 88px; }
+    .col-type    { width: 72px; }
+    .col-comment { width: auto; min-width: 100px; }
+    .col-link    { width: 44px; text-align: center; }
+    .col-actions { width: 76px; text-align: right; }
+
+    .cell-name { font-weight: 500; color: var(--text); }
+    .cell-name.struck { text-decoration: line-through; color: var(--text2); }
+    .cell-comment { font-size: 11px; color: var(--text2); margin-top: 2px; font-style: italic; }
+    .cell-meta { font-size: 11px; color: var(--text3); margin-top: 1px; }
+
+    .gift-check { accent-color: var(--pink); width: 14px; height: 14px; cursor: pointer; }
+
+    /* Tags */
+    .tag { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 10px; font-weight: 500; white-space: nowrap; }
+    .tag.birthday  { background: var(--amber-bg);  color: var(--amber-text); }
+    .tag.christmas { background: var(--green-bg);  color: var(--green-text); }
+    .tag.hanukkah  { background: var(--blue-bg);   color: var(--blue-text); }
+    .tag.other     { background: var(--bg3);        color: var(--text2); }
+    .tag.idea      { background: var(--purple-bg);  color: var(--purple-text); }
+    .tag.wishlist  { background: var(--pink-light);  color: var(--pink-dark); }
+    .tag.archived  { background: var(--bg3);        color: var(--text3); border: 0.5px solid var(--border2); }
+    .tag.claimed-tag { background: var(--green-bg); color: var(--green-text); }
+
+    .row-actions { display: flex; align-items: center; justify-content: flex-end; gap: 2px; opacity: 0; transition: opacity .1s; }
+    tr:hover .row-actions { opacity: 1; }
+    .icon-btn { background: none; border: none; color: var(--text2); padding: 3px; border-radius: 3px; font-size: 15px; line-height: 1; transition: background .1s, color .1s; }
+    .icon-btn:hover { color: var(--text); background: var(--bg3); }
+    .icon-btn.danger:hover { color: var(--danger); background: var(--danger-bg); }
+    .icon-btn.archive-btn:hover { color: var(--amber-text); background: var(--amber-bg); }
+
+    .link-btn { color: var(--blue-text); background: none; border: none; font-size: 15px; padding: 3px; border-radius: 3px; line-height: 1; }
+    .link-btn:hover { background: var(--blue-bg); }
+
+    /* Empty / archive divider */
+    .table-empty { padding: 2rem; text-align: center; color: var(--text2); font-size: 13px; }
+    .table-empty i { font-size: 26px; display: block; margin-bottom: 0.4rem; color: var(--text3); }
+    .archive-divider { font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .05em; padding: 6px 8px 4px; background: var(--bg2); border-top: 0.5px solid var(--border2); border-bottom: 0.5px solid var(--border); display: flex; align-items: center; gap: 8px; }
+    .archive-divider .section-toggle { font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--blue-text); background: none; border: none; font-size: 11px; padding: 0; }
+    .archive-divider .section-toggle:hover { text-decoration: underline; }
+
+    /* Add-person inline form */
+    .add-person-form { display: none; padding: 0.6rem 1rem; background: var(--bg2); border-bottom: 0.5px solid var(--border); }
+    .add-person-form.open { display: flex; align-items: center; gap: 6px; }
+    .add-person-form input { flex: 1; max-width: 200px; }
+
+    /* ── Modals ── */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
     .modal-overlay.open { display: flex; }
-    .modal { background: var(--color-background-primary); border-radius: var(--border-radius-lg); padding: 1.5rem; width: 100%; max-width: 460px; border: 0.5px solid var(--color-border-secondary); box-shadow: 0 8px 40px rgba(0,0,0,0.15); max-height: 90vh; overflow-y: auto; }
-    .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 0.25rem; }
-    .modal .modal-sub { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 1rem; line-height: 1.5; }
-    .modal label { font-size: 13px; color: var(--color-text-secondary); display: block; margin-bottom: 4px; margin-top: 12px; font-weight: 500; }
+    .modal { background: var(--bg); border-radius: var(--r-lg); padding: 1.4rem; width: 100%; max-width: 440px; border: 0.5px solid var(--border2); box-shadow: 0 8px 40px rgba(0,0,0,0.15); max-height: 90vh; overflow-y: auto; }
+    .modal h3 { font-size: 15px; font-weight: 600; margin-bottom: 0.2rem; }
+    .modal .modal-sub { font-size: 12px; color: var(--text2); margin-bottom: 0.85rem; line-height: 1.5; }
+    .modal label { font-size: 12px; color: var(--text2); display: block; margin-bottom: 3px; margin-top: 10px; font-weight: 500; }
     .modal input, .modal select, .modal textarea { width: 100%; }
-    .modal-actions { display: flex; gap: 8px; margin-top: 1.25rem; justify-content: flex-end; }
-    .btn-cancel { padding: 7px 16px; font-size: 13px; background: none; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); cursor: pointer; color: var(--color-text-primary); font-family: var(--font-sans); transition: background 0.15s; }
-    .btn-cancel:hover { background: var(--color-background-secondary); }
-    .btn-save { padding: 7px 16px; font-size: 13px; background: #D4537E; color: white; border: none; border-radius: var(--border-radius-md); cursor: pointer; font-weight: 500; font-family: var(--font-sans); transition: background 0.15s; }
-    .btn-save:hover { background: #993556; }
-    .btn-danger { padding: 7px 16px; font-size: 13px; background: none; border: 0.5px solid var(--color-border-danger); color: var(--color-text-danger); border-radius: var(--border-radius-md); cursor: pointer; font-family: var(--font-sans); }
-    .btn-danger:hover { background: var(--color-background-danger); }
-    .confirm-text { font-size: 14px; color: var(--color-text-secondary); line-height: 1.6; margin-top: 0.75rem; }
-    .confirm-name { font-weight: 600; color: var(--color-text-primary); }
+    .modal-actions { display: flex; gap: 8px; margin-top: 1.1rem; justify-content: flex-end; }
+    .btn-cancel { padding: 6px 14px; font-size: 12px; background: none; border: 0.5px solid var(--border2); border-radius: var(--r-md); color: var(--text); transition: background .15s; }
+    .btn-cancel:hover { background: var(--bg2); }
+    .btn-save { padding: 6px 14px; font-size: 12px; background: var(--pink); color: #fff; border: none; border-radius: var(--r-md); font-weight: 500; transition: background .15s; }
+    .btn-save:hover { background: var(--pink-dark); }
+    .btn-danger { padding: 6px 14px; font-size: 12px; background: none; border: 0.5px solid var(--danger-border); color: var(--danger); border-radius: var(--r-md); }
+    .btn-danger:hover { background: var(--danger-bg); }
+    .confirm-text { font-size: 13px; color: var(--text2); line-height: 1.6; margin-top: 0.6rem; }
+    .confirm-name { font-weight: 600; color: var(--text); }
 
-    .help-modal { max-width: 500px; }
-    .help-scroll { max-height: 65vh; overflow-y: auto; padding-right: 4px; }
-    .help-section { margin-bottom: 1.25rem; }
+    /* Help modal */
+    .help-modal { max-width: 480px; }
+    .help-scroll { max-height: 60vh; overflow-y: auto; padding-right: 4px; }
+    .help-section { margin-bottom: 1rem; }
     .help-section:last-of-type { margin-bottom: 0; }
-    .help-section h4 { font-size: 13px; font-weight: 600; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 6px; }
-    .help-section h4 i { font-size: 16px; color: #D4537E; }
-    .help-section p { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; }
-    .help-divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1rem 0; }
+    .help-section h4 { font-size: 12px; font-weight: 600; margin-bottom: 0.3rem; display: flex; align-items: center; gap: 5px; }
+    .help-section h4 i { font-size: 14px; color: var(--pink); }
+    .help-section p { font-size: 12px; color: var(--text2); line-height: 1.6; }
+    .help-divider { border: none; border-top: 0.5px solid var(--border); margin: 0.85rem 0; }
 
-    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 10px; margin-bottom: 1.25rem; }
-    .stat-card { background: var(--color-background-primary); border-radius: var(--border-radius-md); padding: 1rem; text-align: center; border: 0.5px solid var(--color-border-tertiary); }
-    .stat-label { font-size: 13px; color: var(--color-text-secondary); }
-    .stat-value { font-size: 26px; font-weight: 600; margin-top: 4px; }
+    /* Overview */
+    .overview-wrap { padding: 1rem; }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 8px; margin-bottom: 1rem; }
+    .stat-card { background: var(--bg); border-radius: var(--r-md); padding: 0.85rem; text-align: center; border: 0.5px solid var(--border); }
+    .stat-label { font-size: 11px; color: var(--text2); }
+    .stat-value { font-size: 24px; font-weight: 600; margin-top: 3px; }
+    .overview-table { width: 100%; border-collapse: collapse; font-size: 12px; background: var(--bg); border-radius: var(--r-md); overflow: hidden; border: 0.5px solid var(--border); }
+    .overview-table th { padding: 6px 10px; text-align: left; font-size: 11px; font-weight: 600; color: var(--text2); background: var(--bg2); border-bottom: 0.5px solid var(--border2); }
+    .overview-table td { padding: 7px 10px; border-bottom: 0.5px solid var(--border); vertical-align: middle; }
+    .overview-table tr:last-child td { border-bottom: none; }
+    .progress-bar-wrap { display: flex; align-items: center; gap: 6px; }
+    .progress-bar { background: var(--bg2); border-radius: 10px; height: 6px; flex: 1; overflow: hidden; }
+    .progress-fill { background: var(--pink); height: 100%; border-radius: 10px; }
   </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- Login -->
+  <!-- ── LOGIN ── -->
   <div id="login-screen" class="screen active">
     <div class="login-card">
       <div class="login-icon"><i class="ti ti-gift"></i></div>
       <h1>Kerckhoff Family Gift Manager</h1>
       <p class="subtitle">Welcome! Who are you, and what's the password?</p>
       <div class="login-field">
-        <label class="login-field-label">I am…</label>
-        <select id="login-person-select">
-          <option value="">— select your name —</option>
-        </select>
+        <label>I am…</label>
+        <select id="login-person-select"><option value="">— select your name —</option></select>
       </div>
       <div class="login-field">
-        <label class="login-field-label">Family password</label>
+        <label>Family password</label>
         <input type="password" id="pw-input" placeholder="Enter password" />
-        <p class="password-hint">Hint: Zach's fuzzy brother's name</p>
+        <p class="pw-hint">Hint: Zach's fuzzy brother's name</p>
       </div>
       <div class="err" id="person-err">Please select your name.</div>
       <div class="err" id="pw-err">Incorrect password. Try again.</div>
@@ -198,12 +261,11 @@
     </div>
   </div>
 
-  <!-- Main App -->
+  <!-- ── MAIN APP ── -->
   <div id="main-screen" class="screen">
-    <div id="sync-bar">
-      <i class="ti ti-cloud" id="sync-icon"></i>
-      <span id="sync-text">Connecting…</span>
-    </div>
+    <div id="sync-bar"><i class="ti ti-cloud" id="sync-icon"></i><span id="sync-text">Connecting…</span></div>
+
+    <!-- Topbar -->
     <div class="topbar">
       <div class="topbar-left">
         <span class="topbar-logo"><i class="ti ti-gift"></i></span>
@@ -216,28 +278,36 @@
         <button class="icon-btn-top" onclick="logout()" title="Log out"><i class="ti ti-logout"></i></button>
       </div>
     </div>
-    <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('wishlists',this)"><i class="ti ti-list"></i> Wishlists</button>
-      <button class="tab-btn" onclick="switchTab('overview',this)"><i class="ti ti-layout-grid"></i> Overview</button>
+
+    <!-- Person tabs -->
+    <div class="person-tabs-wrap" id="person-tabs"></div>
+
+    <!-- Add-person inline form -->
+    <div class="add-person-form" id="add-person-form">
+      <input type="text" id="new-person-name" placeholder="New member name" onkeydown="if(event.key==='Enter')saveNewPerson()" />
+      <button class="btn-sm solid" onclick="saveNewPerson()">Add</button>
+      <button class="btn-sm" onclick="closeAddPerson()">Cancel</button>
     </div>
-    <div id="tab-wishlists" class="content">
-      <div class="people-grid" id="people-grid"></div>
-      <div class="add-person-form" id="add-person-form">
-        <label>Add a family member</label>
-        <div class="row">
-          <input type="text" id="new-person-name" placeholder="Name" onkeydown="if(event.key==='Enter')saveNewPerson()" />
-          <button class="btn-save" onclick="saveNewPerson()">Add</button>
-          <button class="btn-cancel" onclick="closeAddPerson()">Cancel</button>
-        </div>
-      </div>
-      <div id="wishlist-area"></div>
+
+    <!-- Section tabs -->
+    <div class="section-tabs">
+      <button class="section-tab active" onclick="switchTab('wishlists',this)">Wishlists</button>
+      <button class="section-tab" onclick="switchTab('overview',this)">Overview</button>
     </div>
-    <div id="tab-overview" class="content" style="display:none;">
-      <div id="overview-content"></div>
+
+    <!-- Wishlist tab -->
+    <div id="tab-wishlists">
+      <div class="table-toolbar" id="table-toolbar"></div>
+      <div class="gift-table-wrap" id="wishlist-area"></div>
+    </div>
+
+    <!-- Overview tab -->
+    <div id="tab-overview" style="display:none;">
+      <div class="overview-wrap" id="overview-content"></div>
     </div>
   </div>
 
-  <!-- Gift modal (add / edit) -->
+  <!-- ── GIFT MODAL ── -->
   <div class="modal-overlay" id="gift-modal">
     <div class="modal">
       <h3 id="modal-title">Add a gift</h3>
@@ -264,7 +334,7 @@
     </div>
   </div>
 
-  <!-- Delete person confirm -->
+  <!-- ── DELETE PERSON MODAL ── -->
   <div class="modal-overlay" id="delete-person-modal">
     <div class="modal">
       <h3>Remove family member?</h3>
@@ -276,47 +346,47 @@
     </div>
   </div>
 
-  <!-- Help modal -->
+  <!-- ── HELP MODAL ── -->
   <div class="modal-overlay" id="help-modal">
     <div class="modal help-modal">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.85rem">
         <h3 style="margin:0">How to use this app</h3>
         <button class="icon-btn" onclick="closeHelp()"><i class="ti ti-x"></i></button>
       </div>
       <div class="help-scroll">
         <div class="help-section">
           <h4><i class="ti ti-login"></i> Logging in</h4>
-          <p>Pick your name from the dropdown and enter the family password. The app opens your own wishlist automatically.</p>
+          <p>Pick your name and enter the family password. The app opens your own list automatically.</p>
         </div>
         <hr class="help-divider">
         <div class="help-section">
-          <h4><i class="ti ti-list"></i> Your wishlist</h4>
-          <p>Your name card is selected when you log in. Use "Add to my list" to add gifts you'd like. Anyone can edit any gift — use the pencil icon to update details, add a link, or leave a comment.</p>
+          <h4><i class="ti ti-table"></i> The gift table</h4>
+          <p>Each person's gifts appear as a compact table. Click any column header to sort. Use the occasion filter chips to narrow rows. Hover a row to reveal action buttons.</p>
         </div>
         <hr class="help-divider">
         <div class="help-section">
           <h4><i class="ti ti-check"></i> Claiming gifts</h4>
-          <p>Click another family member's name to see their wishlist. Check the box next to a gift to claim it — no duplicates. The recipient can't see who claimed their gifts.</p>
+          <p>When viewing someone else's list, check the box in the first column to claim a gift or idea — others will see "Claimed by you." The recipient never sees claims on their own list.</p>
         </div>
         <hr class="help-divider">
         <div class="help-section">
-          <h4><i class="ti ti-bulb"></i> Adding gift ideas for others</h4>
-          <p>When viewing someone else's list, click "Add gift idea" to suggest a gift. It's visible to all other family members but hidden from the recipient. Anyone can edit an idea to add a link or notes, and anyone can claim an idea just like a regular wishlist item — check the box to let others know you're buying it.</p>
+          <h4><i class="ti ti-bulb"></i> Gift ideas</h4>
+          <p>Click "Add idea" when viewing someone else's list to suggest a gift. Ideas are hidden from the recipient but visible to everyone else. Anyone can edit or claim an idea.</p>
         </div>
         <hr class="help-divider">
         <div class="help-section">
-          <h4><i class="ti ti-archive"></i> Archiving gifts</h4>
-          <p>After a gift has been given, click the archive icon (box) to move it to the archive. Archived gifts are hidden from the main list but preserved for history. Toggle "Show archive" to view them.</p>
+          <h4><i class="ti ti-archive"></i> Archiving</h4>
+          <p>Click the box icon on any row to archive a gift after it's been given. Archived rows are hidden by default — click "Show archive" at the bottom of the table to reveal them.</p>
         </div>
         <hr class="help-divider">
         <div class="help-section">
-          <h4><i class="ti ti-cloud"></i> Real-time sync</h4>
-          <p>The green bar at the top means changes sync instantly across every family member's device.</p>
+          <h4><i class="ti ti-copy"></i> Copying data</h4>
+          <p>Because the gift list is a real HTML table, you can select rows and paste directly into Excel or Google Sheets. Select all rows with Ctrl/Cmd+A, then copy and paste.</p>
         </div>
         <hr class="help-divider">
         <div class="help-section">
-          <h4><i class="ti ti-layout-grid"></i> Overview tab</h4>
-          <p>See everyone's wishlist progress at a glance — total wishes, gifts claimed, and a progress bar per person.</p>
+          <h4><i class="ti ti-cloud"></i> Sync</h4>
+          <p>The colored bar at the top shows sync status. Green = all changes saved to the cloud and visible to all family members.</p>
         </div>
       </div>
       <div class="modal-actions">
@@ -325,12 +395,12 @@
     </div>
   </div>
 
-</div>
+</div><!-- #app -->
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script>
-// ─── CONFIGURATION ─────────────────────────────────────────────────────────
+// ─── CONFIGURATION ──────────────────────────────────────────────────────────
 const FAMILY_PASSWORD = 'Felix';
 
 const FIREBASE_CONFIG = {
@@ -343,7 +413,7 @@ const FIREBASE_CONFIG = {
   appId: "1:375441041038:web:b2c098d073cf06f9208bdf",
   measurementId: "G-4CFX454QH7"
 };
-// ───────────────────────────────────────────────────────────────────────────
+// ────────────────────────────────────────────────────────────────────────────
 
 const AVATAR_COLORS = [
   {bg:'#FBEAF0',color:'#993556'},{bg:'#E6F1FB',color:'#185FA5'},
@@ -367,65 +437,65 @@ let state = {
   selectedPersonId:1, currentUser:'Mom',
   filterOccasion:'all', editingGiftId:null,
   pendingDeletePersonId:null, modalMode:'own',
-  showArchive: false,
+  showArchive:false,
+  sortCol:'', sortDir:'asc',
 };
 
-// ─── Firebase ───────────────────────────────────────────────────────────────
-let db = null, syncDebounce = null;
+// ─── Firebase ────────────────────────────────────────────────────────────────
+let db=null, syncDebounce=null;
 
-function initFirebase() {
-  try {
+function initFirebase(){
+  try{
     firebase.initializeApp(FIREBASE_CONFIG);
-    db = firebase.database();
+    db=firebase.database();
     setSyncStatus('syncing','Connecting…');
-    db.ref('giftmanager').on('value', snap => {
-      const data = snap.val();
-      if (data) {
-        const cu=state.currentUser, sel=state.selectedPersonId, fil=state.filterOccasion, sa=state.showArchive;
-        state = Object.assign({}, state, {
-          people: data.people||state.people, gifts: data.gifts||state.gifts,
-          nextId: data.nextId||state.nextId, nextPersonId: data.nextPersonId||state.nextPersonId,
-          currentUser:cu, selectedPersonId:sel, filterOccasion:fil, showArchive:sa,
+    db.ref('giftmanager').on('value', snap=>{
+      const data=snap.val();
+      if(data){
+        const {currentUser:cu,selectedPersonId:sel,filterOccasion:fil,showArchive:sa,sortCol:sc,sortDir:sd}=state;
+        state=Object.assign({},state,{
+          people:data.people||state.people, gifts:data.gifts||state.gifts,
+          nextId:data.nextId||state.nextId, nextPersonId:data.nextPersonId||state.nextPersonId,
+          currentUser:cu,selectedPersonId:sel,filterOccasion:fil,showArchive:sa,sortCol:sc,sortDir:sd,
         });
-        // Ensure all gifts have the comment and archived fields (for backwards compat)
-        state.gifts = state.gifts.map(g => ({comment:'', archived:false, ...g}));
+        state.gifts=state.gifts.map(g=>({comment:'',archived:false,...g}));
         localSave();
-        if (document.getElementById('main-screen').classList.contains('active')) { renderUserSelect(); renderPeopleGrid(); renderWishlist(); }
-        if (document.getElementById('login-screen').classList.contains('active')) { populateLoginDropdown(); }
+        if(document.getElementById('main-screen').classList.contains('active')){renderApp();}
+        if(document.getElementById('login-screen').classList.contains('active')){populateLoginDropdown();}
       }
       setSyncStatus('synced','Synced');
-    }, () => setSyncStatus('error','Sync error — check your connection'));
-  } catch(e) { setSyncStatus('error','Could not connect to Firebase'); }
+    },()=>setSyncStatus('error','Sync error'));
+  }catch(e){setSyncStatus('error','Firebase error');}
 }
 
-function pushToFirebase() {
-  if (!db) return;
+function pushToFirebase(){
+  if(!db)return;
   setSyncStatus('syncing','Saving…');
-  if (syncDebounce) clearTimeout(syncDebounce);
-  syncDebounce = setTimeout(() => {
+  if(syncDebounce)clearTimeout(syncDebounce);
+  syncDebounce=setTimeout(()=>{
     db.ref('giftmanager').set({people:state.people,gifts:state.gifts,nextId:state.nextId,nextPersonId:state.nextPersonId})
       .then(()=>setSyncStatus('synced','Synced')).catch(()=>setSyncStatus('error','Save failed'));
-  }, 400);
+  },400);
 }
 
-function setSyncStatus(type,text) {
+function setSyncStatus(type,text){
   document.getElementById('sync-bar').className='visible '+type;
   document.getElementById('sync-text').textContent=text;
   document.getElementById('sync-icon').className=type==='syncing'?'ti ti-cloud-upload':type==='error'?'ti ti-cloud-off':'ti ti-cloud-check';
 }
 
-// ─── Storage ────────────────────────────────────────────────────────────────
-function localSave() { try{localStorage.setItem('fgm_v5',JSON.stringify({people:state.people,gifts:state.gifts,nextId:state.nextId,nextPersonId:state.nextPersonId}));}catch(e){} }
-function localLoad() { try{const s=localStorage.getItem('fgm_v5');if(s){const d=JSON.parse(s);state.people=d.people||state.people;state.gifts=d.gifts||state.gifts;state.nextId=d.nextId||state.nextId;state.nextPersonId=d.nextPersonId||state.nextPersonId;}}catch(e){} }
-function save() { localSave(); pushToFirebase(); }
+// ─── Storage ─────────────────────────────────────────────────────────────────
+function localSave(){try{localStorage.setItem('fgm_v5',JSON.stringify({people:state.people,gifts:state.gifts,nextId:state.nextId,nextPersonId:state.nextPersonId}));}catch(e){}}
+function localLoad(){try{const s=localStorage.getItem('fgm_v5');if(s){const d=JSON.parse(s);state.people=d.people||state.people;state.gifts=d.gifts||state.gifts;state.nextId=d.nextId||state.nextId;state.nextPersonId=d.nextPersonId||state.nextPersonId;}}catch(e){}}
+function save(){localSave();pushToFirebase();}
 
-// ─── Login ──────────────────────────────────────────────────────────────────
-function populateLoginDropdown() {
-  const sel=document.getElementById('login-person-select'), cur=sel.value;
+// ─── Login ───────────────────────────────────────────────────────────────────
+function populateLoginDropdown(){
+  const sel=document.getElementById('login-person-select'),cur=sel.value;
   sel.innerHTML='<option value="">— select your name —</option>'+state.people.map(p=>`<option value="${p.name}"${p.name===cur?' selected':''}>${p.name}</option>`).join('');
 }
 
-function doLogin() {
+function doLogin(){
   const personName=document.getElementById('login-person-select').value;
   const password=document.getElementById('pw-input').value;
   let ok=true;
@@ -433,66 +503,68 @@ function doLogin() {
   document.getElementById('pw-err').style.display='none';
   if(!personName){document.getElementById('person-err').style.display='block';ok=false;}
   if(password!==FAMILY_PASSWORD){document.getElementById('pw-err').style.display='block';ok=false;}
-  if(!ok) return;
+  if(!ok)return;
   state.currentUser=personName;
   const person=state.people.find(p=>p.name===personName);
-  if(person) state.selectedPersonId=person.id;
+  if(person)state.selectedPersonId=person.id;
   document.getElementById('login-screen').classList.remove('active');
   document.getElementById('main-screen').classList.add('active');
   renderApp();
 }
 document.getElementById('pw-input').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 
-function logout() {
+function logout(){
   document.getElementById('main-screen').classList.remove('active');
   document.getElementById('login-screen').classList.add('active');
   document.getElementById('pw-input').value='';
   document.getElementById('login-person-select').value='';
 }
 
-// ─── UI ─────────────────────────────────────────────────────────────────────
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+function getInitials(n){return n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);}
 function openHelp(){document.getElementById('help-modal').classList.add('open');}
 function closeHelp(){document.getElementById('help-modal').classList.remove('open');}
-function setCurrentUser(n){state.currentUser=n;state.showArchive=false;renderWishlist();}
+function setCurrentUser(n){state.currentUser=n;state.showArchive=false;state.sortCol='';state.sortDir='asc';renderWishlist();}
 
 function switchTab(tab,btn){
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.section-tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('tab-wishlists').style.display=tab==='wishlists'?'block':'none';
   document.getElementById('tab-overview').style.display=tab==='overview'?'block':'none';
-  if(tab==='overview') renderOverview();
+  if(tab==='overview')renderOverview();
 }
 
-function renderApp(){renderUserSelect();renderPeopleGrid();renderWishlist();}
+function renderApp(){renderUserSelect();renderPersonTabs();renderWishlist();}
 
 function renderUserSelect(){
   document.getElementById('current-user-select').innerHTML=state.people.map(p=>`<option value="${p.name}"${p.name===state.currentUser?' selected':''}>${p.name}</option>`).join('');
 }
 
-function getInitials(n){return n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);}
-
-function renderPeopleGrid(){
-  const cards=state.people.map(p=>{
+// ─── Person tabs ──────────────────────────────────────────────────────────────
+function renderPersonTabs(){
+  const tabs=state.people.map(p=>{
     const col=AVATAR_COLORS[p.color%AVATAR_COLORS.length];
     const cnt=state.gifts.filter(g=>g.personId===p.id&&!g.archived).length;
-    return `<div class="person-card${p.id===state.selectedPersonId?' selected':''}" onclick="selectPerson(${p.id})">
-      <button class="delete-person-btn" onclick="openDeletePerson(event,${p.id})"><i class="ti ti-x"></i></button>
-      <div class="avatar" style="background:${col.bg};color:${col.color}">${getInitials(p.name)}</div>
-      <div class="name">${p.name}</div>
-      <div class="gift-count">${cnt} gift${cnt!==1?'s':''}</div>
-    </div>`;
+    const active=p.id===state.selectedPersonId;
+    return `<button class="person-tab${active?' active':''}" onclick="selectPerson(${p.id})">
+      <div class="tab-avatar" style="background:${col.bg};color:${col.color}">${getInitials(p.name)}</div>
+      ${p.name}
+      <span class="tab-count">${cnt}</span>
+      <button class="person-tab-del" onclick="openDeletePerson(event,${p.id})" title="Remove ${p.name}"><i class="ti ti-x"></i></button>
+    </button>`;
   }).join('');
-  document.getElementById('people-grid').innerHTML=cards+`<div class="add-person-card" onclick="openAddPerson()"><i class="ti ti-user-plus" style="font-size:26px"></i><span>Add member</span></div>`;
+  document.getElementById('person-tabs').innerHTML=tabs+`<button class="add-person-tab" onclick="openAddPerson()"><i class="ti ti-user-plus"></i> Add</button>`;
 }
 
-function selectPerson(id){state.selectedPersonId=id;state.filterOccasion='all';state.showArchive=false;renderPeopleGrid();renderWishlist();}
+function selectPerson(id){state.selectedPersonId=id;state.filterOccasion='all';state.showArchive=false;state.sortCol='';state.sortDir='asc';renderPersonTabs();renderWishlist();}
+
 function openAddPerson(){document.getElementById('add-person-form').classList.add('open');document.getElementById('new-person-name').focus();}
 function closeAddPerson(){document.getElementById('add-person-form').classList.remove('open');document.getElementById('new-person-name').value='';}
 function saveNewPerson(){
   const name=document.getElementById('new-person-name').value.trim();if(!name)return;
   const p={id:state.nextPersonId++,name,color:state.people.length};
   state.people.push(p);state.selectedPersonId=p.id;
-  save();closeAddPerson();populateLoginDropdown();renderUserSelect();renderPeopleGrid();renderWishlist();
+  save();closeAddPerson();populateLoginDropdown();renderUserSelect();renderPersonTabs();renderWishlist();
 }
 
 function openDeletePerson(e,id){
@@ -508,125 +580,206 @@ function confirmDeletePerson(){
   const removed=state.people.find(p=>p.id===id)?.name;
   state.gifts=state.gifts.filter(g=>g.personId!==id);
   state.people=state.people.filter(p=>p.id!==id);
-  if(state.selectedPersonId===id) state.selectedPersonId=state.people.length?state.people[0].id:null;
-  if(state.currentUser===removed) state.currentUser=state.people.length?state.people[0].name:'';
-  closeDeletePersonModal();save();populateLoginDropdown();renderUserSelect();renderPeopleGrid();renderWishlist();
+  if(state.selectedPersonId===id)state.selectedPersonId=state.people.length?state.people[0].id:null;
+  if(state.currentUser===removed)state.currentUser=state.people.length?state.people[0].name:'';
+  closeDeletePersonModal();save();populateLoginDropdown();renderUserSelect();renderPersonTabs();renderWishlist();
 }
 
-// ─── Archive ─────────────────────────────────────────────────────────────────
-function toggleArchive(id){
-  const g=state.gifts.find(g=>g.id===id);if(!g)return;
-  g.archived=!g.archived;
-  save();renderPeopleGrid();renderWishlist();
-}
-function toggleShowArchive(){
-  state.showArchive=!state.showArchive;
+// ─── Sorting ──────────────────────────────────────────────────────────────────
+function sortBy(col){
+  if(state.sortCol===col){state.sortDir=state.sortDir==='asc'?'desc':'asc';}
+  else{state.sortCol=col;state.sortDir='asc';}
   renderWishlist();
 }
 
-// ─── Wishlist render ─────────────────────────────────────────────────────────
-function renderWishlist(){
-  if(!state.selectedPersonId||!state.people.length){
-    document.getElementById('wishlist-area').innerHTML=`<div class="empty-state"><i class="ti ti-users"></i>Add a family member to get started.</div>`;return;
+function applySortFilter(gifts){
+  // Filter
+  let g=gifts;
+  if(state.filterOccasion!=='all')g=g.filter(x=>x.occasion===state.filterOccasion);
+  // Sort
+  if(state.sortCol){
+    const dir=state.sortDir==='asc'?1:-1;
+    g=[...g].sort((a,b)=>{
+      const av=(a[state.sortCol]||'').toString().toLowerCase();
+      const bv=(b[state.sortCol]||'').toString().toLowerCase();
+      return av<bv?-dir:av>bv?dir:0;
+    });
   }
-  const person=state.people.find(p=>p.id===state.selectedPersonId);if(!person)return;
-  const isOwnList=person.name===state.currentUser;
+  return g;
+}
 
-  let allGifts=state.gifts.filter(g=>g.personId===state.selectedPersonId);
-  if(state.filterOccasion!=='all') allGifts=allGifts.filter(g=>g.occasion===state.filterOccasion);
+function sortIcon(col){
+  if(state.sortCol!==col)return '<i class="ti ti-selector sort-icon"></i>';
+  return state.sortDir==='asc'?'<i class="ti ti-sort-ascending sort-icon"></i>':'<i class="ti ti-sort-descending sort-icon"></i>';
+}
+function sortClass(col){return state.sortCol===col?('sort-'+state.sortDir):'';}
 
+// ─── Toolbar ──────────────────────────────────────────────────────────────────
+function renderToolbar(person,isOwnList){
   const filters=['all','birthday','christmas','hanukkah','other'];
-  const filterHTML=`<div class="filter-row">${filters.map(f=>`<button class="filter-chip${state.filterOccasion===f?' active':''}" onclick="setFilter('${f}')">${f==='all'?'All':f.charAt(0).toUpperCase()+f.slice(1)}</button>`).join('')}</div>`;
-
-  function giftCard(g){
-    // Ideas and wishlist items can both be claimed when viewing someone else's list (not archived)
-    const canClaim=!isOwnList&&!g.archived;
-    const claimBox=canClaim
-      ?`<input type="checkbox" class="gift-check"${g.claimed?' checked':''} onchange="toggleClaim(${g.id},this.checked)" title="${g.claimed?'Unclaim':'Claim — I\'ll buy this!'}">`
-      :`<span style="width:15px;flex-shrink:0;display:inline-block"></span>`;
-
-    // Everyone can edit any gift
-    const archiveTitle=g.archived?'Unarchive':'Archive (move to history)';
-    const archiveIcon=g.archived?'ti-archive-off':'ti-archive';
-    const actions=`<div class="gift-actions">
-      <button class="icon-btn" onclick="openEditGift(${g.id})" title="Edit"><i class="ti ti-edit"></i></button>
-      <button class="icon-btn archive-btn" onclick="toggleArchive(${g.id})" title="${archiveTitle}"><i class="ti ${archiveIcon}"></i></button>
-      <button class="icon-btn danger" onclick="deleteGift(${g.id})" title="Delete permanently"><i class="ti ti-trash"></i></button>
-    </div>`;
-
-    const nameClass='gift-name'+(g.archived?' archived-text':(!isOwnList&&g.claimed?' claimed-text':''));
-    return `<div class="gift-item${g.claimed&&!g.archived?' claimed':''}${g.isSuggestion?' suggestion':''}${g.archived?' archived':''}">
-      ${claimBox}
-      <div class="gift-info">
-        <div class="${nameClass}">${g.name}</div>
-        <div class="gift-meta">
-          <span class="tag ${g.occasion}">${g.occasion}</span>
-          ${g.isSuggestion?'<span class="tag idea">idea</span>':''}
-          ${g.archived?'<span class="tag archived-tag">archived</span>':''}
-          ${g.price?`<span class="price-tag">${g.price}</span>`:''}
-          ${g.link?`<a class="gift-link" href="${g.link}" target="_blank">View link</a>`:''}
-          ${!isOwnList&&g.claimed?`<span class="claimed-by">Claimed by ${g.claimedBy}</span>`:''}
-          ${g.isSuggestion?`<span class="suggested-by"><i class="ti ti-bulb" style="font-size:11px"></i> Idea from ${g.suggestedBy}</span>`:''}
-        </div>
-        ${g.comment?`<div class="gift-comment">${g.comment.replace(/\n/g,'<br>')}</div>`:''}
-      </div>
-      ${actions}
-    </div>`;
-  }
-
-  // Active (non-archived) gifts
-  const activeWish = allGifts.filter(g=>!g.isSuggestion&&!g.archived);
-  const archivedWish = allGifts.filter(g=>!g.isSuggestion&&g.archived);
-
-  // Ideas: never shown to recipient; archived ideas are included in archive section
-  const activeIdeas = isOwnList?[]:allGifts.filter(g=>g.isSuggestion&&!g.archived);
-  const archivedIdeas = isOwnList?[]:allGifts.filter(g=>g.isSuggestion&&g.archived);
-
-  const allArchived = [...archivedWish, ...archivedIdeas];
-
-  const wishHTML = activeWish.length
-    ? activeWish.map(giftCard).join('')
-    : `<div class="empty-state" style="padding:1rem"><i class="ti ti-gift"></i>${isOwnList?'Add gifts to your wishlist above.':'No wishlist items yet.'}</div>`;
-
-  const btns = isOwnList
-    ? `<div class="header-btns"><button class="btn-outline" onclick="openAddGift()"><i class="ti ti-plus"></i> Add to my list</button></div>`
-    : `<div class="header-btns"><button class="btn-outline pink" onclick="openSuggestGift()"><i class="ti ti-bulb"></i> Add gift idea</button></div>`;
-
-  // Ideas section (other-person view only)
-  const ideasSection = isOwnList ? '' : `
-    <div class="section-label">Gift ideas for ${person.name}</div>
-    ${activeIdeas.length
-      ? activeIdeas.map(giftCard).join('')
-      : `<div style="font-size:13px;color:var(--color-text-secondary);padding:0.5rem 0">No ideas added yet — add one above!</div>`}`;
-
-  // Archive section
-  const archiveSection = allArchived.length ? `
-    <div class="section-label">
-      <span><i class="ti ti-archive" style="font-size:13px;vertical-align:-1px"></i> Archive (${allArchived.length})</span>
-      <span class="section-toggle" onclick="toggleShowArchive()">${state.showArchive?'Hide':'Show'}</span>
+  const chips=filters.map(f=>`<button class="fchip${state.filterOccasion===f?' active':''}" onclick="setFilter('${f}')">${f==='all'?'All':f.charAt(0).toUpperCase()+f.slice(1)}</button>`).join('');
+  const addBtn=isOwnList
+    ?`<button class="btn-sm solid" onclick="openAddGift()"><i class="ti ti-plus"></i> Add gift</button>`
+    :`<button class="btn-sm pink" onclick="openSuggestGift()"><i class="ti ti-bulb"></i> Add idea</button>`;
+  document.getElementById('table-toolbar').innerHTML=`
+    <div class="toolbar-left">
+      <span class="toolbar-title">${isOwnList?'My wishlist':`${person.name}'s wishlist`}</span>
+      ${chips}
     </div>
-    ${state.showArchive ? allArchived.map(giftCard).join('') : ''}
-  ` : '';
-
-  document.getElementById('wishlist-area').innerHTML=`
-    <div class="wishlist-header"><h3>${isOwnList?'My wishlist':`${person.name}'s wishlist`}</h3>${btns}</div>
-    ${filterHTML}${wishHTML}${ideasSection}${archiveSection}`;
+    <div class="toolbar-right">${addBtn}</div>`;
 }
 
 function setFilter(f){state.filterOccasion=f;renderWishlist();}
 
+// ─── Table render ─────────────────────────────────────────────────────────────
+function renderWishlist(){
+  if(!state.selectedPersonId||!state.people.length){
+    document.getElementById('table-toolbar').innerHTML='';
+    document.getElementById('wishlist-area').innerHTML=`<div class="table-empty"><i class="ti ti-users"></i>Add a family member to get started.</div>`;
+    return;
+  }
+  const person=state.people.find(p=>p.id===state.selectedPersonId);if(!person)return;
+  const isOwnList=person.name===state.currentUser;
+
+  renderToolbar(person,isOwnList);
+
+  const allForPerson=state.gifts.filter(g=>g.personId===state.selectedPersonId);
+
+  // Split: active wishlist, active ideas (hidden from own view), archived
+  const activeWish=applySortFilter(allForPerson.filter(g=>!g.isSuggestion&&!g.archived));
+  const activeIdeas=isOwnList?[]:applySortFilter(allForPerson.filter(g=>g.isSuggestion&&!g.archived));
+  const archivedAll=isOwnList
+    ? applySortFilter(allForPerson.filter(g=>g.archived&&!g.isSuggestion))
+    : applySortFilter(allForPerson.filter(g=>g.archived));
+
+  function thRow(){
+    return `<tr>
+      <th class="col-claim"></th>
+      <th class="col-name sortable ${sortClass('name')}" onclick="sortBy('name')">Gift ${sortIcon('name')}</th>
+      <th class="col-occ sortable ${sortClass('occasion')}" onclick="sortBy('occasion')">Occasion ${sortIcon('occasion')}</th>
+      <th class="col-price sortable ${sortClass('price')}" onclick="sortBy('price')">Price ${sortIcon('price')}</th>
+      <th class="col-claimed sortable ${sortClass('claimedBy')}" onclick="sortBy('claimedBy')">Claimed by ${sortIcon('claimedBy')}</th>
+      <th class="col-type sortable ${sortClass('type')}" onclick="sortBy('type')">Type ${sortIcon('type')}</th>
+      <th class="col-comment">Comments</th>
+      <th class="col-link">Link</th>
+      <th class="col-actions"></th>
+    </tr>`;
+  }
+
+  function giftRow(g){
+    const canClaim=!isOwnList&&!g.archived;
+    const claimCell=canClaim
+      ?`<input type="checkbox" class="gift-check"${g.claimed?' checked':''} onchange="toggleClaim(${g.id},this.checked)" title="${g.claimed?'Unclaim':'Claim — I\'ll buy this!'}">`
+      :'';
+
+    const nameStruck=(g.archived||(!isOwnList&&g.claimed))?'struck':'';
+
+    const occasionTag=`<span class="tag ${g.occasion}">${g.occasion}</span>`;
+
+    // Type column: wishlist / idea / archived
+    const typeTag=g.archived
+      ? `<span class="tag archived">archived</span>`
+      : g.isSuggestion
+        ? `<span class="tag idea">idea</span>`
+        : `<span class="tag wishlist">wishlist</span>`;
+
+    const claimedDisplay=(!isOwnList&&g.claimed)?`<span class="tag claimed-tag">${g.claimedBy}</span>`:
+                         (isOwnList&&g.claimed&&!g.archived)?`<span style="font-size:11px;color:var(--text2)">${g.claimedBy}</span>`:'';
+
+    const commentCell=g.comment
+      ?`<span style="font-size:11px;color:var(--text2);font-style:italic">${g.comment.replace(/\n/g,' · ')}</span>`
+      :'';
+
+    const linkCell=g.link?`<a href="${g.link}" target="_blank" class="link-btn" title="View link"><i class="ti ti-external-link"></i></a>`:'';
+
+    const archiveTitle=g.archived?'Unarchive':'Archive';
+    const archiveIcon=g.archived?'ti-archive-off':'ti-archive';
+
+    const rowClass=[
+      g.claimed&&!g.archived?'row-claimed':'',
+      g.archived?'row-archived':'',
+      g.isSuggestion&&!g.archived?'row-idea':'',
+    ].filter(Boolean).join(' ');
+
+    return `<tr class="${rowClass}">
+      <td class="col-claim">${claimCell}</td>
+      <td class="col-name"><div class="cell-name ${nameStruck}">${g.name}</div></td>
+      <td class="col-occ">${occasionTag}</td>
+      <td class="col-price" style="color:var(--text2)">${g.price||''}</td>
+      <td class="col-claimed">${claimedDisplay}</td>
+      <td class="col-type">${typeTag}</td>
+      <td class="col-comment">${commentCell}</td>
+      <td class="col-link">${linkCell}</td>
+      <td class="col-actions">
+        <div class="row-actions">
+          <button class="icon-btn" onclick="openEditGift(${g.id})" title="Edit"><i class="ti ti-edit"></i></button>
+          <button class="icon-btn archive-btn" onclick="toggleArchive(${g.id})" title="${archiveTitle}"><i class="ti ${archiveIcon}"></i></button>
+          <button class="icon-btn danger" onclick="deleteGift(${g.id})" title="Delete permanently"><i class="ti ti-trash"></i></button>
+        </div>
+      </td>
+    </tr>`;
+  }
+
+  // Build sections
+  let html='<table class="gift-table">';
+
+  // Wishlist section
+  html+=`<thead>${thRow()}</thead><tbody>`;
+  if(activeWish.length){
+    html+=activeWish.map(giftRow).join('');
+  } else {
+    html+=`<tr><td colspan="9"><div class="table-empty"><i class="ti ti-gift"></i>${isOwnList?'Add gifts to your list above.':'No wishlist items yet.'}</div></td></tr>`;
+  }
+  html+='</tbody>';
+
+  // Ideas section (others' view only)
+  if(!isOwnList){
+    html+=`<thead><tr><th colspan="9" style="background:color-mix(in srgb,var(--purple-bg) 30%,var(--bg2));color:var(--purple-text);font-size:10px;letter-spacing:.05em">GIFT IDEAS FOR ${person.name.toUpperCase()}</th></tr>${thRow()}</thead><tbody>`;
+    if(activeIdeas.length){
+      html+=activeIdeas.map(giftRow).join('');
+    } else {
+      html+=`<tr><td colspan="9"><div class="table-empty" style="padding:0.75rem">No ideas added yet — click "Add idea" above!</div></td></tr>`;
+    }
+    html+='</tbody>';
+  }
+
+  html+='</table>';
+
+  // Archive section
+  if(archivedAll.length){
+    html+=`<div class="archive-divider">
+      <i class="ti ti-archive" style="font-size:12px"></i>
+      Archive (${archivedAll.length})
+      <button class="section-toggle" onclick="toggleShowArchive()">${state.showArchive?'Hide':'Show'}</button>
+    </div>`;
+    if(state.showArchive){
+      html+=`<table class="gift-table"><thead>${thRow()}</thead><tbody>${archivedAll.map(giftRow).join('')}</tbody></table>`;
+    }
+  }
+
+  document.getElementById('wishlist-area').innerHTML=html;
+}
+
+// ─── Actions ──────────────────────────────────────────────────────────────────
 function toggleClaim(giftId,checked){
   const g=state.gifts.find(g=>g.id===giftId);if(!g)return;
   g.claimed=checked;g.claimedBy=checked?state.currentUser:'';
-  save();renderPeopleGrid();renderWishlist();
+  save();renderPersonTabs();renderWishlist();
 }
+
+function toggleArchive(id){
+  const g=state.gifts.find(g=>g.id===id);if(!g)return;
+  g.archived=!g.archived;
+  save();renderPersonTabs();renderWishlist();
+}
+function toggleShowArchive(){state.showArchive=!state.showArchive;renderWishlist();}
 
 function deleteGift(id){
-  if(!confirm('Permanently delete this gift? This cannot be undone. (Use archive to keep history.)')) return;
-  state.gifts=state.gifts.filter(g=>g.id!==id);save();renderPeopleGrid();renderWishlist();
+  if(!confirm('Permanently delete this gift? This cannot be undone. (Use archive to keep history.)'))return;
+  state.gifts=state.gifts.filter(g=>g.id!==id);save();renderPersonTabs();renderWishlist();
 }
 
-// ─── Gift modal ──────────────────────────────────────────────────────────────
+// ─── Gift modal ───────────────────────────────────────────────────────────────
 function openGiftModal(mode,giftId){
   state.modalMode=mode;state.editingGiftId=giftId||null;
   const person=state.people.find(p=>p.id===state.selectedPersonId);
@@ -638,7 +791,6 @@ function openGiftModal(mode,giftId){
     document.getElementById('modal-title').textContent='Add to my wishlist';
     document.getElementById('modal-sub').textContent='';
   } else if(giftId){
-    // Edit mode — works for any gift, any member
     const g=state.gifts.find(g=>g.id===giftId);
     document.getElementById('modal-title').textContent='Edit gift';
     document.getElementById('modal-sub').textContent='';
@@ -664,45 +816,48 @@ function saveGift(){
   const price=document.getElementById('gift-price-input').value.trim();
   const link=document.getElementById('gift-link-input').value.trim();
   const comment=document.getElementById('gift-comment-input').value.trim();
-
   if(state.editingGiftId){
     Object.assign(state.gifts.find(g=>g.id===state.editingGiftId),{name,occasion,price,link,comment});
   } else {
     const isSugg=state.modalMode==='suggest';
-    state.gifts.push({
-      id:state.nextId++, personId:state.selectedPersonId,
-      name, occasion, price, link, comment,
-      claimed:false, claimedBy:'',
-      isSuggestion:isSugg, suggestedBy:isSugg?state.currentUser:'',
-      archived:false
-    });
+    state.gifts.push({id:state.nextId++,personId:state.selectedPersonId,name,occasion,price,link,comment,claimed:false,claimedBy:'',isSuggestion:isSugg,suggestedBy:isSugg?state.currentUser:'',archived:false});
   }
-  save();closeGiftModal();renderPeopleGrid();renderWishlist();
+  save();closeGiftModal();renderPersonTabs();renderWishlist();
 }
 
-// ─── Overview ────────────────────────────────────────────────────────────────
+// ─── Overview ─────────────────────────────────────────────────────────────────
 function renderOverview(){
-  const activeGifts=state.gifts.filter(g=>!g.isSuggestion&&!g.archived);
-  const totalGifts=activeGifts.length, totalClaimed=activeGifts.filter(g=>g.claimed).length;
+  const active=state.gifts.filter(g=>!g.isSuggestion&&!g.archived);
+  const totalGifts=active.length, totalClaimed=active.filter(g=>g.claimed).length;
   const rows=state.people.map(p=>{
-    const gifts=activeGifts.filter(g=>g.personId===p.id), claimed=gifts.filter(g=>g.claimed).length;
-    const col=AVATAR_COLORS[p.color%AVATAR_COLORS.length], pct=gifts.length?Math.round(claimed/gifts.length*100):0;
-    return `<div class="gift-item" style="align-items:center">
-      <div class="avatar" style="background:${col.bg};color:${col.color};width:36px;height:36px;font-size:12px;flex-shrink:0">${getInitials(p.name)}</div>
-      <div class="gift-info"><div class="gift-name">${p.name}</div><div class="gift-meta"><span style="font-size:12px;color:var(--color-text-secondary)">${gifts.length} wish${gifts.length!==1?'es':''} · ${claimed} claimed</span></div></div>
-      ${gifts.length?`<div style="display:flex;gap:8px;align-items:center"><div style="background:var(--color-background-secondary);border-radius:20px;height:8px;width:80px;overflow:hidden"><div style="background:#D4537E;height:100%;width:${pct}%;border-radius:20px"></div></div><span style="font-size:12px;color:var(--color-text-secondary)">${pct}%</span></div>`:''}
-    </div>`;
+    const gifts=active.filter(g=>g.personId===p.id),claimed=gifts.filter(g=>g.claimed).length;
+    const col=AVATAR_COLORS[p.color%AVATAR_COLORS.length],pct=gifts.length?Math.round(claimed/gifts.length*100):0;
+    return `<tr>
+      <td><div style="display:flex;align-items:center;gap:7px">
+        <div style="width:26px;height:26px;border-radius:50%;background:${col.bg};color:${col.color};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">${getInitials(p.name)}</div>
+        ${p.name}
+      </div></td>
+      <td style="text-align:center">${gifts.length}</td>
+      <td style="text-align:center">${claimed}</td>
+      <td><div class="progress-bar-wrap">
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+        <span style="font-size:11px;color:var(--text2);white-space:nowrap">${pct}%</span>
+      </div></td>
+    </tr>`;
   }).join('');
   document.getElementById('overview-content').innerHTML=`
     <div class="stat-grid">
       <div class="stat-card"><div class="stat-label">Family members</div><div class="stat-value">${state.people.length}</div></div>
       <div class="stat-card"><div class="stat-label">Active wishes</div><div class="stat-value">${totalGifts}</div></div>
-      <div class="stat-card"><div class="stat-label">Gifts claimed</div><div class="stat-value" style="color:#D4537E">${totalClaimed}</div></div>
+      <div class="stat-card"><div class="stat-label">Gifts claimed</div><div class="stat-value" style="color:var(--pink)">${totalClaimed}</div></div>
     </div>
-    <h3 style="font-size:15px;font-weight:600;margin-bottom:0.75rem">Progress by person</h3>${rows}`;
+    <table class="overview-table">
+      <thead><tr><th>Person</th><th style="text-align:center">Wishes</th><th style="text-align:center">Claimed</th><th>Progress</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
 }
 
-// ─── Boot ───────────────────────────────────────────────────────────────────
+// ─── Boot ─────────────────────────────────────────────────────────────────────
 localLoad();
 populateLoginDropdown();
 initFirebase();
