@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,8 +27,9 @@
       }
     }
     body { font-family: var(--font-sans); background: var(--color-background-secondary); color: var(--color-text-primary); min-height: 100vh; }
-    input, select { font-family: var(--font-sans); font-size: 14px; padding: 7px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary); outline: none; }
-    input:focus, select:focus { border-color: #D4537E; box-shadow: 0 0 0 2px rgba(212,83,126,0.15); }
+    input, select, textarea { font-family: var(--font-sans); font-size: 14px; padding: 7px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary); outline: none; }
+    input:focus, select:focus, textarea:focus { border-color: #D4537E; box-shadow: 0 0 0 2px rgba(212,83,126,0.15); }
+    textarea { resize: vertical; width: 100%; min-height: 70px; line-height: 1.5; }
     #app { max-width: 800px; margin: 0 auto; min-height: 100vh; background: var(--color-background-secondary); }
     .screen { display: none; } .screen.active { display: block; }
 
@@ -90,24 +92,28 @@
 
     .wishlist-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 8px; }
     .wishlist-header h3 { font-size: 15px; font-weight: 600; }
-    .header-btns { display: flex; gap: 6px; }
+    .header-btns { display: flex; gap: 6px; flex-wrap: wrap; }
     .btn-outline { display: flex; align-items: center; gap: 4px; padding: 6px 12px; font-size: 13px; background: none; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); cursor: pointer; color: var(--color-text-primary); transition: background 0.15s; font-family: var(--font-sans); }
     .btn-outline:hover { background: var(--color-background-secondary); }
     .btn-outline.pink { border-color: #D4537E; color: #D4537E; }
     .btn-outline.pink:hover { background: #FBEAF0; }
+    .btn-outline.muted { color: var(--color-text-secondary); font-size: 12px; padding: 5px 10px; }
 
     .filter-row { display: flex; gap: 6px; margin-bottom: 1rem; flex-wrap: wrap; }
     .filter-chip { font-size: 12px; padding: 4px 12px; border: 0.5px solid var(--color-border-secondary); border-radius: 20px; background: none; cursor: pointer; color: var(--color-text-secondary); font-family: var(--font-sans); transition: all 0.15s; }
     .filter-chip.active { background: #D4537E; color: white; border-color: #D4537E; }
     .filter-chip:hover:not(.active) { border-color: #D4537E; color: #D4537E; }
 
+    /* Gift cards */
     .gift-item { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 0.75rem 1rem; margin-bottom: 8px; display: flex; align-items: flex-start; gap: 10px; }
     .gift-item.claimed { opacity: 0.6; }
     .gift-item.suggestion { border-style: dashed; background: var(--color-background-secondary); }
+    .gift-item.archived { opacity: 0.55; background: var(--color-background-secondary); border-style: dotted; }
     .gift-check { margin-top: 3px; accent-color: #D4537E; cursor: pointer; flex-shrink: 0; width: 15px; height: 15px; }
     .gift-info { flex: 1; min-width: 0; }
     .gift-name { font-size: 14px; font-weight: 500; }
     .gift-name.claimed-text { text-decoration: line-through; color: var(--color-text-secondary); }
+    .gift-name.archived-text { text-decoration: line-through; color: var(--color-text-secondary); font-style: italic; }
     .gift-meta { display: flex; align-items: center; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
     .tag { font-size: 11px; padding: 2px 8px; border-radius: 20px; background: #FBEAF0; color: #993556; }
     .tag.birthday { background: #FAEEDA; color: #854F0B; }
@@ -115,27 +121,32 @@
     .tag.hanukkah { background: #E6F1FB; color: #185FA5; }
     .tag.other { background: #F1EFE8; color: #5F5E5A; }
     .tag.idea { background: #EEEDFE; color: #3C3489; }
+    .tag.archived-tag { background: var(--color-background-secondary); color: var(--color-text-secondary); border: 0.5px solid var(--color-border-secondary); }
     .price-tag { font-size: 11px; color: var(--color-text-secondary); }
     .gift-link { font-size: 11px; color: #185FA5; text-decoration: none; }
     .gift-link:hover { text-decoration: underline; }
     .suggested-by { font-size: 11px; color: #534AB7; font-style: italic; }
     .claimed-by { font-size: 11px; color: var(--color-text-secondary); font-style: italic; }
+    .gift-comment { font-size: 12px; color: var(--color-text-secondary); margin-top: 5px; line-height: 1.5; font-style: italic; border-left: 2px solid var(--color-border-secondary); padding-left: 8px; }
     .gift-actions { display: flex; gap: 4px; flex-shrink: 0; }
     .icon-btn { background: none; border: none; cursor: pointer; color: var(--color-text-secondary); padding: 4px; border-radius: 4px; font-size: 17px; line-height: 1; transition: background 0.15s, color 0.15s; }
     .icon-btn:hover { color: var(--color-text-primary); background: var(--color-background-secondary); }
     .icon-btn.danger:hover { color: #A32D2D; background: var(--color-background-danger); }
+    .icon-btn.archive-btn:hover { color: #854F0B; background: #FAEEDA; }
 
-    .section-label { font-size: 11px; font-weight: 600; color: var(--color-text-secondary); margin: 1.25rem 0 0.5rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .section-label { font-size: 11px; font-weight: 600; color: var(--color-text-secondary); margin: 1.25rem 0 0.5rem; text-transform: uppercase; letter-spacing: 0.06em; display: flex; align-items: center; gap: 8px; }
+    .section-toggle { font-size: 11px; font-weight: 400; color: #185FA5; cursor: pointer; text-transform: none; letter-spacing: 0; }
+    .section-toggle:hover { text-decoration: underline; }
     .empty-state { text-align: center; padding: 2rem 1rem; color: var(--color-text-secondary); font-size: 14px; }
     .empty-state i { font-size: 30px; display: block; margin-bottom: 0.5rem; }
 
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 100; align-items: center; justify-content: center; padding: 1rem; }
     .modal-overlay.open { display: flex; }
-    .modal { background: var(--color-background-primary); border-radius: var(--border-radius-lg); padding: 1.5rem; width: 100%; max-width: 440px; border: 0.5px solid var(--color-border-secondary); box-shadow: 0 8px 40px rgba(0,0,0,0.15); }
+    .modal { background: var(--color-background-primary); border-radius: var(--border-radius-lg); padding: 1.5rem; width: 100%; max-width: 460px; border: 0.5px solid var(--color-border-secondary); box-shadow: 0 8px 40px rgba(0,0,0,0.15); max-height: 90vh; overflow-y: auto; }
     .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 0.25rem; }
     .modal .modal-sub { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 1rem; line-height: 1.5; }
     .modal label { font-size: 13px; color: var(--color-text-secondary); display: block; margin-bottom: 4px; margin-top: 12px; font-weight: 500; }
-    .modal input, .modal select { width: 100%; }
+    .modal input, .modal select, .modal textarea { width: 100%; }
     .modal-actions { display: flex; gap: 8px; margin-top: 1.25rem; justify-content: flex-end; }
     .btn-cancel { padding: 7px 16px; font-size: 13px; background: none; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); cursor: pointer; color: var(--color-text-primary); font-family: var(--font-sans); transition: background 0.15s; }
     .btn-cancel:hover { background: var(--color-background-secondary); }
@@ -170,23 +181,19 @@
       <div class="login-icon"><i class="ti ti-gift"></i></div>
       <h1>Kerckhoff Family Gift Manager</h1>
       <p class="subtitle">Welcome! Who are you, and what's the password?</p>
-
       <div class="login-field">
         <label class="login-field-label">I am…</label>
         <select id="login-person-select">
           <option value="">— select your name —</option>
         </select>
       </div>
-
       <div class="login-field">
         <label class="login-field-label">Family password</label>
         <input type="password" id="pw-input" placeholder="Enter password" />
         <p class="password-hint">Hint: Zach's fuzzy brother's name</p>
       </div>
-
       <div class="err" id="person-err">Please select your name.</div>
       <div class="err" id="pw-err">Incorrect password. Try again.</div>
-
       <button class="btn-primary" onclick="doLogin()">Enter</button>
     </div>
   </div>
@@ -230,7 +237,7 @@
     </div>
   </div>
 
-  <!-- Gift modal -->
+  <!-- Gift modal (add / edit) -->
   <div class="modal-overlay" id="gift-modal">
     <div class="modal">
       <h3 id="modal-title">Add a gift</h3>
@@ -248,6 +255,8 @@
       <input type="text" id="gift-price-input" placeholder="e.g. $25" />
       <label>Link (optional)</label>
       <input type="text" id="gift-link-input" placeholder="https://..." />
+      <label>Comments (optional)</label>
+      <textarea id="gift-comment-input" placeholder="Size, color preference, any notes…"></textarea>
       <div class="modal-actions">
         <button class="btn-cancel" onclick="closeGiftModal()">Cancel</button>
         <button class="btn-save" onclick="saveGift()">Save</button>
@@ -282,7 +291,7 @@
         <hr class="help-divider">
         <div class="help-section">
           <h4><i class="ti ti-list"></i> Your wishlist</h4>
-          <p>Your name card is selected when you log in. Use "Add to my list" to add gifts you'd like. Edit or delete with the pencil and trash icons. Gift ideas from other family members are hidden from you to keep surprises intact!</p>
+          <p>Your name card is selected when you log in. Use "Add to my list" to add gifts you'd like. Anyone can edit any gift — use the pencil icon to update details, add a link, or leave a comment.</p>
         </div>
         <hr class="help-divider">
         <div class="help-section">
@@ -292,7 +301,12 @@
         <hr class="help-divider">
         <div class="help-section">
           <h4><i class="ti ti-bulb"></i> Adding gift ideas for others</h4>
-          <p>When viewing someone else's list, click "Add gift idea" to suggest a gift. It's visible to all other family members but hidden from the recipient — surprises safe!</p>
+          <p>When viewing someone else's list, click "Add gift idea" to suggest a gift. It's visible to all other family members but hidden from the recipient. Anyone can edit an idea to add a link or notes, and anyone can claim an idea just like a regular wishlist item — check the box to let others know you're buying it.</p>
+        </div>
+        <hr class="help-divider">
+        <div class="help-section">
+          <h4><i class="ti ti-archive"></i> Archiving gifts</h4>
+          <p>After a gift has been given, click the archive icon (box) to move it to the archive. Archived gifts are hidden from the main list but preserved for history. Toggle "Show archive" to view them.</p>
         </div>
         <hr class="help-divider">
         <div class="help-section">
@@ -343,16 +357,17 @@ let state = {
     {id:3,name:'Sarah',color:2},{id:4,name:'Jake',color:3},
   ],
   gifts: [
-    {id:1,personId:1,name:'Silk scarf',occasion:'birthday',price:'$45',link:'',claimed:false,claimedBy:'',isSuggestion:false,suggestedBy:''},
-    {id:2,personId:1,name:'Cookbook: Ottolenghi Simple',occasion:'christmas',price:'$30',link:'',claimed:true,claimedBy:'Dad',isSuggestion:false,suggestedBy:''},
-    {id:3,personId:2,name:'Wireless earbuds',occasion:'christmas',price:'$80',link:'',claimed:false,claimedBy:'',isSuggestion:false,suggestedBy:''},
-    {id:4,personId:3,name:'Watercolor set',occasion:'birthday',price:'$35',link:'',claimed:false,claimedBy:'',isSuggestion:false,suggestedBy:''},
-    {id:5,personId:4,name:'LEGO Technic set',occasion:'christmas',price:'$60',link:'',claimed:true,claimedBy:'Mom',isSuggestion:false,suggestedBy:''},
+    {id:1,personId:1,name:'Silk scarf',occasion:'birthday',price:'$45',link:'',comment:'',claimed:false,claimedBy:'',isSuggestion:false,suggestedBy:'',archived:false},
+    {id:2,personId:1,name:'Cookbook: Ottolenghi Simple',occasion:'christmas',price:'$30',link:'',comment:'',claimed:true,claimedBy:'Dad',isSuggestion:false,suggestedBy:'',archived:false},
+    {id:3,personId:2,name:'Wireless earbuds',occasion:'christmas',price:'$80',link:'',comment:'',claimed:false,claimedBy:'',isSuggestion:false,suggestedBy:'',archived:false},
+    {id:4,personId:3,name:'Watercolor set',occasion:'birthday',price:'$35',link:'',comment:'',claimed:false,claimedBy:'',isSuggestion:false,suggestedBy:'',archived:false},
+    {id:5,personId:4,name:'LEGO Technic set',occasion:'christmas',price:'$60',link:'',comment:'',claimed:true,claimedBy:'Mom',isSuggestion:false,suggestedBy:'',archived:false},
   ],
   nextId:6, nextPersonId:5,
   selectedPersonId:1, currentUser:'Mom',
   filterOccasion:'all', editingGiftId:null,
   pendingDeletePersonId:null, modalMode:'own',
+  showArchive: false,
 };
 
 // ─── Firebase ───────────────────────────────────────────────────────────────
@@ -366,12 +381,14 @@ function initFirebase() {
     db.ref('giftmanager').on('value', snap => {
       const data = snap.val();
       if (data) {
-        const cu=state.currentUser, sel=state.selectedPersonId, fil=state.filterOccasion;
+        const cu=state.currentUser, sel=state.selectedPersonId, fil=state.filterOccasion, sa=state.showArchive;
         state = Object.assign({}, state, {
           people: data.people||state.people, gifts: data.gifts||state.gifts,
           nextId: data.nextId||state.nextId, nextPersonId: data.nextPersonId||state.nextPersonId,
-          currentUser:cu, selectedPersonId:sel, filterOccasion:fil,
+          currentUser:cu, selectedPersonId:sel, filterOccasion:fil, showArchive:sa,
         });
+        // Ensure all gifts have the comment and archived fields (for backwards compat)
+        state.gifts = state.gifts.map(g => ({comment:'', archived:false, ...g}));
         localSave();
         if (document.getElementById('main-screen').classList.contains('active')) { renderUserSelect(); renderPeopleGrid(); renderWishlist(); }
         if (document.getElementById('login-screen').classList.contains('active')) { populateLoginDropdown(); }
@@ -398,8 +415,8 @@ function setSyncStatus(type,text) {
 }
 
 // ─── Storage ────────────────────────────────────────────────────────────────
-function localSave() { try{localStorage.setItem('fgm_v4',JSON.stringify({people:state.people,gifts:state.gifts,nextId:state.nextId,nextPersonId:state.nextPersonId}));}catch(e){} }
-function localLoad() { try{const s=localStorage.getItem('fgm_v4');if(s){const d=JSON.parse(s);state.people=d.people||state.people;state.gifts=d.gifts||state.gifts;state.nextId=d.nextId||state.nextId;state.nextPersonId=d.nextPersonId||state.nextPersonId;}}catch(e){} }
+function localSave() { try{localStorage.setItem('fgm_v5',JSON.stringify({people:state.people,gifts:state.gifts,nextId:state.nextId,nextPersonId:state.nextPersonId}));}catch(e){} }
+function localLoad() { try{const s=localStorage.getItem('fgm_v5');if(s){const d=JSON.parse(s);state.people=d.people||state.people;state.gifts=d.gifts||state.gifts;state.nextId=d.nextId||state.nextId;state.nextPersonId=d.nextPersonId||state.nextPersonId;}}catch(e){} }
 function save() { localSave(); pushToFirebase(); }
 
 // ─── Login ──────────────────────────────────────────────────────────────────
@@ -436,7 +453,7 @@ function logout() {
 // ─── UI ─────────────────────────────────────────────────────────────────────
 function openHelp(){document.getElementById('help-modal').classList.add('open');}
 function closeHelp(){document.getElementById('help-modal').classList.remove('open');}
-function setCurrentUser(n){state.currentUser=n;renderWishlist();}
+function setCurrentUser(n){state.currentUser=n;state.showArchive=false;renderWishlist();}
 
 function switchTab(tab,btn){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
@@ -457,7 +474,7 @@ function getInitials(n){return n.split(' ').map(w=>w[0]).join('').toUpperCase().
 function renderPeopleGrid(){
   const cards=state.people.map(p=>{
     const col=AVATAR_COLORS[p.color%AVATAR_COLORS.length];
-    const cnt=state.gifts.filter(g=>g.personId===p.id).length;
+    const cnt=state.gifts.filter(g=>g.personId===p.id&&!g.archived).length;
     return `<div class="person-card${p.id===state.selectedPersonId?' selected':''}" onclick="selectPerson(${p.id})">
       <button class="delete-person-btn" onclick="openDeletePerson(event,${p.id})"><i class="ti ti-x"></i></button>
       <div class="avatar" style="background:${col.bg};color:${col.color}">${getInitials(p.name)}</div>
@@ -468,7 +485,7 @@ function renderPeopleGrid(){
   document.getElementById('people-grid').innerHTML=cards+`<div class="add-person-card" onclick="openAddPerson()"><i class="ti ti-user-plus" style="font-size:26px"></i><span>Add member</span></div>`;
 }
 
-function selectPerson(id){state.selectedPersonId=id;state.filterOccasion='all';renderPeopleGrid();renderWishlist();}
+function selectPerson(id){state.selectedPersonId=id;state.filterOccasion='all';state.showArchive=false;renderPeopleGrid();renderWishlist();}
 function openAddPerson(){document.getElementById('add-person-form').classList.add('open');document.getElementById('new-person-name').focus();}
 function closeAddPerson(){document.getElementById('add-person-form').classList.remove('open');document.getElementById('new-person-name').value='';}
 function saveNewPerson(){
@@ -482,7 +499,7 @@ function openDeletePerson(e,id){
   e.stopPropagation();
   const p=state.people.find(p=>p.id===id),cnt=state.gifts.filter(g=>g.personId===id).length;
   state.pendingDeletePersonId=id;
-  document.getElementById('delete-person-text').innerHTML=`This will permanently remove <span class="confirm-name">${p.name}</span> and their ${cnt} gift wish${cnt!==1?'es':''} from the family list.`;
+  document.getElementById('delete-person-text').innerHTML=`This will permanently remove <span class="confirm-name">${p.name}</span> and their ${cnt} gift${cnt!==1?'s':''} from the family list.`;
   document.getElementById('delete-person-modal').classList.add('open');
 }
 function closeDeletePersonModal(){document.getElementById('delete-person-modal').classList.remove('open');state.pendingDeletePersonId=null;}
@@ -496,6 +513,18 @@ function confirmDeletePerson(){
   closeDeletePersonModal();save();populateLoginDropdown();renderUserSelect();renderPeopleGrid();renderWishlist();
 }
 
+// ─── Archive ─────────────────────────────────────────────────────────────────
+function toggleArchive(id){
+  const g=state.gifts.find(g=>g.id===id);if(!g)return;
+  g.archived=!g.archived;
+  save();renderPeopleGrid();renderWishlist();
+}
+function toggleShowArchive(){
+  state.showArchive=!state.showArchive;
+  renderWishlist();
+}
+
+// ─── Wishlist render ─────────────────────────────────────────────────────────
 function renderWishlist(){
   if(!state.selectedPersonId||!state.people.length){
     document.getElementById('wishlist-area').innerHTML=`<div class="empty-state"><i class="ti ti-users"></i>Add a family member to get started.</div>`;return;
@@ -510,42 +539,78 @@ function renderWishlist(){
   const filterHTML=`<div class="filter-row">${filters.map(f=>`<button class="filter-chip${state.filterOccasion===f?' active':''}" onclick="setFilter('${f}')">${f==='all'?'All':f.charAt(0).toUpperCase()+f.slice(1)}</button>`).join('')}</div>`;
 
   function giftCard(g){
-    const canClaim=!isOwnList&&!g.isSuggestion;
-    const claimBox=canClaim?`<input type="checkbox" class="gift-check"${g.claimed?' checked':''} onchange="toggleClaim(${g.id},this.checked)">`:`<span style="width:15px;flex-shrink:0;display:inline-block"></span>`;
-    let actions='';
-    if(isOwnList&&!g.isSuggestion) actions=`<div class="gift-actions"><button class="icon-btn" onclick="openEditGift(${g.id})"><i class="ti ti-edit"></i></button><button class="icon-btn danger" onclick="deleteGift(${g.id})"><i class="ti ti-trash"></i></button></div>`;
-    else actions=`<div class="gift-actions"><button class="icon-btn danger" onclick="deleteGift(${g.id})"><i class="ti ti-trash"></i></button></div>`;
-    return `<div class="gift-item${g.claimed?' claimed':''}${g.isSuggestion?' suggestion':''}">
+    // Ideas and wishlist items can both be claimed when viewing someone else's list (not archived)
+    const canClaim=!isOwnList&&!g.archived;
+    const claimBox=canClaim
+      ?`<input type="checkbox" class="gift-check"${g.claimed?' checked':''} onchange="toggleClaim(${g.id},this.checked)" title="${g.claimed?'Unclaim':'Claim — I\'ll buy this!'}">`
+      :`<span style="width:15px;flex-shrink:0;display:inline-block"></span>`;
+
+    // Everyone can edit any gift
+    const archiveTitle=g.archived?'Unarchive':'Archive (move to history)';
+    const archiveIcon=g.archived?'ti-archive-off':'ti-archive';
+    const actions=`<div class="gift-actions">
+      <button class="icon-btn" onclick="openEditGift(${g.id})" title="Edit"><i class="ti ti-edit"></i></button>
+      <button class="icon-btn archive-btn" onclick="toggleArchive(${g.id})" title="${archiveTitle}"><i class="ti ${archiveIcon}"></i></button>
+      <button class="icon-btn danger" onclick="deleteGift(${g.id})" title="Delete permanently"><i class="ti ti-trash"></i></button>
+    </div>`;
+
+    const nameClass='gift-name'+(g.archived?' archived-text':(!isOwnList&&g.claimed?' claimed-text':''));
+    return `<div class="gift-item${g.claimed&&!g.archived?' claimed':''}${g.isSuggestion?' suggestion':''}${g.archived?' archived':''}">
       ${claimBox}
       <div class="gift-info">
-        <div class="gift-name${!isOwnList&&g.claimed?' claimed-text':''}">${g.name}</div>
+        <div class="${nameClass}">${g.name}</div>
         <div class="gift-meta">
           <span class="tag ${g.occasion}">${g.occasion}</span>
           ${g.isSuggestion?'<span class="tag idea">idea</span>':''}
+          ${g.archived?'<span class="tag archived-tag">archived</span>':''}
           ${g.price?`<span class="price-tag">${g.price}</span>`:''}
           ${g.link?`<a class="gift-link" href="${g.link}" target="_blank">View link</a>`:''}
           ${!isOwnList&&g.claimed?`<span class="claimed-by">Claimed by ${g.claimedBy}</span>`:''}
           ${g.isSuggestion?`<span class="suggested-by"><i class="ti ti-bulb" style="font-size:11px"></i> Idea from ${g.suggestedBy}</span>`:''}
         </div>
-      </div>${actions}
+        ${g.comment?`<div class="gift-comment">${g.comment.replace(/\n/g,'<br>')}</div>`:''}
+      </div>
+      ${actions}
     </div>`;
   }
 
-  const wishGifts=allGifts.filter(g=>!g.isSuggestion);
-  // Gift ideas are NEVER shown to the recipient — only visible when viewing someone else's list
-  const ideaGifts=isOwnList?[]:allGifts.filter(g=>g.isSuggestion);
+  // Active (non-archived) gifts
+  const activeWish = allGifts.filter(g=>!g.isSuggestion&&!g.archived);
+  const archivedWish = allGifts.filter(g=>!g.isSuggestion&&g.archived);
 
-  const wishHTML=wishGifts.length?wishGifts.map(giftCard).join(''):`<div class="empty-state" style="padding:1rem"><i class="ti ti-gift"></i>${isOwnList?'Add gifts to your wishlist above.':'No wishlist items yet.'}</div>`;
-  const btns=isOwnList
-    ?`<div class="header-btns"><button class="btn-outline" onclick="openAddGift()"><i class="ti ti-plus"></i> Add to my list</button></div>`
-    :`<div class="header-btns"><button class="btn-outline pink" onclick="openSuggestGift()"><i class="ti ti-bulb"></i> Add gift idea</button></div>`;
+  // Ideas: never shown to recipient; archived ideas are included in archive section
+  const activeIdeas = isOwnList?[]:allGifts.filter(g=>g.isSuggestion&&!g.archived);
+  const archivedIdeas = isOwnList?[]:allGifts.filter(g=>g.isSuggestion&&g.archived);
 
-  // Ideas section only appears when viewing someone else
-  const ideasSection=isOwnList?'':(`<div class="section-label">Your gift ideas for ${person.name}</div>`+(ideaGifts.length?ideaGifts.map(giftCard).join(''):`<div style="font-size:13px;color:var(--color-text-secondary);padding:0.5rem 0">No ideas added yet — add one above!</div>`));
+  const allArchived = [...archivedWish, ...archivedIdeas];
+
+  const wishHTML = activeWish.length
+    ? activeWish.map(giftCard).join('')
+    : `<div class="empty-state" style="padding:1rem"><i class="ti ti-gift"></i>${isOwnList?'Add gifts to your wishlist above.':'No wishlist items yet.'}</div>`;
+
+  const btns = isOwnList
+    ? `<div class="header-btns"><button class="btn-outline" onclick="openAddGift()"><i class="ti ti-plus"></i> Add to my list</button></div>`
+    : `<div class="header-btns"><button class="btn-outline pink" onclick="openSuggestGift()"><i class="ti ti-bulb"></i> Add gift idea</button></div>`;
+
+  // Ideas section (other-person view only)
+  const ideasSection = isOwnList ? '' : `
+    <div class="section-label">Gift ideas for ${person.name}</div>
+    ${activeIdeas.length
+      ? activeIdeas.map(giftCard).join('')
+      : `<div style="font-size:13px;color:var(--color-text-secondary);padding:0.5rem 0">No ideas added yet — add one above!</div>`}`;
+
+  // Archive section
+  const archiveSection = allArchived.length ? `
+    <div class="section-label">
+      <span><i class="ti ti-archive" style="font-size:13px;vertical-align:-1px"></i> Archive (${allArchived.length})</span>
+      <span class="section-toggle" onclick="toggleShowArchive()">${state.showArchive?'Hide':'Show'}</span>
+    </div>
+    ${state.showArchive ? allArchived.map(giftCard).join('') : ''}
+  ` : '';
 
   document.getElementById('wishlist-area').innerHTML=`
     <div class="wishlist-header"><h3>${isOwnList?'My wishlist':`${person.name}'s wishlist`}</h3>${btns}</div>
-    ${filterHTML}${wishHTML}${ideasSection}`;
+    ${filterHTML}${wishHTML}${ideasSection}${archiveSection}`;
 }
 
 function setFilter(f){state.filterOccasion=f;renderWishlist();}
@@ -555,21 +620,33 @@ function toggleClaim(giftId,checked){
   g.claimed=checked;g.claimedBy=checked?state.currentUser:'';
   save();renderPeopleGrid();renderWishlist();
 }
-function deleteGift(id){state.gifts=state.gifts.filter(g=>g.id!==id);save();renderPeopleGrid();renderWishlist();}
 
+function deleteGift(id){
+  if(!confirm('Permanently delete this gift? This cannot be undone. (Use archive to keep history.)')) return;
+  state.gifts=state.gifts.filter(g=>g.id!==id);save();renderPeopleGrid();renderWishlist();
+}
+
+// ─── Gift modal ──────────────────────────────────────────────────────────────
 function openGiftModal(mode,giftId){
   state.modalMode=mode;state.editingGiftId=giftId||null;
   const person=state.people.find(p=>p.id===state.selectedPersonId);
   ['gift-name-input','gift-price-input','gift-link-input'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('gift-comment-input').value='';
   document.getElementById('gift-occasion-input').value='christmas';
-  if(mode==='own'&&!giftId){document.getElementById('modal-title').textContent='Add to my wishlist';document.getElementById('modal-sub').textContent='';}
-  else if(mode==='own'&&giftId){
-    document.getElementById('modal-title').textContent='Edit gift';document.getElementById('modal-sub').textContent='';
+
+  if(mode==='own'&&!giftId){
+    document.getElementById('modal-title').textContent='Add to my wishlist';
+    document.getElementById('modal-sub').textContent='';
+  } else if(giftId){
+    // Edit mode — works for any gift, any member
     const g=state.gifts.find(g=>g.id===giftId);
+    document.getElementById('modal-title').textContent='Edit gift';
+    document.getElementById('modal-sub').textContent='';
     document.getElementById('gift-name-input').value=g.name;
     document.getElementById('gift-occasion-input').value=g.occasion;
-    document.getElementById('gift-price-input').value=g.price;
-    document.getElementById('gift-link-input').value=g.link;
+    document.getElementById('gift-price-input').value=g.price||'';
+    document.getElementById('gift-link-input').value=g.link||'';
+    document.getElementById('gift-comment-input').value=g.comment||'';
   } else if(mode==='suggest'){
     document.getElementById('modal-title').textContent=`Add a gift idea for ${person.name}`;
     document.getElementById('modal-sub').textContent=`Visible to all other family members — ${person.name} won't see it.`;
@@ -578,7 +655,7 @@ function openGiftModal(mode,giftId){
 }
 function openAddGift(){openGiftModal('own',null);}
 function openSuggestGift(){openGiftModal('suggest',null);}
-function openEditGift(id){openGiftModal('own',id);}
+function openEditGift(id){openGiftModal('edit',id);}
 function closeGiftModal(){document.getElementById('gift-modal').classList.remove('open');}
 
 function saveGift(){
@@ -586,19 +663,30 @@ function saveGift(){
   const occasion=document.getElementById('gift-occasion-input').value;
   const price=document.getElementById('gift-price-input').value.trim();
   const link=document.getElementById('gift-link-input').value.trim();
-  if(state.editingGiftId){Object.assign(state.gifts.find(g=>g.id===state.editingGiftId),{name,occasion,price,link});}
-  else{
+  const comment=document.getElementById('gift-comment-input').value.trim();
+
+  if(state.editingGiftId){
+    Object.assign(state.gifts.find(g=>g.id===state.editingGiftId),{name,occasion,price,link,comment});
+  } else {
     const isSugg=state.modalMode==='suggest';
-    state.gifts.push({id:state.nextId++,personId:state.selectedPersonId,name,occasion,price,link,claimed:false,claimedBy:'',isSuggestion:isSugg,suggestedBy:isSugg?state.currentUser:''});
+    state.gifts.push({
+      id:state.nextId++, personId:state.selectedPersonId,
+      name, occasion, price, link, comment,
+      claimed:false, claimedBy:'',
+      isSuggestion:isSugg, suggestedBy:isSugg?state.currentUser:'',
+      archived:false
+    });
   }
   save();closeGiftModal();renderPeopleGrid();renderWishlist();
 }
 
+// ─── Overview ────────────────────────────────────────────────────────────────
 function renderOverview(){
-  const totalGifts=state.gifts.filter(g=>!g.isSuggestion).length,totalClaimed=state.gifts.filter(g=>g.claimed).length;
+  const activeGifts=state.gifts.filter(g=>!g.isSuggestion&&!g.archived);
+  const totalGifts=activeGifts.length, totalClaimed=activeGifts.filter(g=>g.claimed).length;
   const rows=state.people.map(p=>{
-    const gifts=state.gifts.filter(g=>g.personId===p.id&&!g.isSuggestion),claimed=gifts.filter(g=>g.claimed).length;
-    const col=AVATAR_COLORS[p.color%AVATAR_COLORS.length],pct=gifts.length?Math.round(claimed/gifts.length*100):0;
+    const gifts=activeGifts.filter(g=>g.personId===p.id), claimed=gifts.filter(g=>g.claimed).length;
+    const col=AVATAR_COLORS[p.color%AVATAR_COLORS.length], pct=gifts.length?Math.round(claimed/gifts.length*100):0;
     return `<div class="gift-item" style="align-items:center">
       <div class="avatar" style="background:${col.bg};color:${col.color};width:36px;height:36px;font-size:12px;flex-shrink:0">${getInitials(p.name)}</div>
       <div class="gift-info"><div class="gift-name">${p.name}</div><div class="gift-meta"><span style="font-size:12px;color:var(--color-text-secondary)">${gifts.length} wish${gifts.length!==1?'es':''} · ${claimed} claimed</span></div></div>
@@ -608,7 +696,7 @@ function renderOverview(){
   document.getElementById('overview-content').innerHTML=`
     <div class="stat-grid">
       <div class="stat-card"><div class="stat-label">Family members</div><div class="stat-value">${state.people.length}</div></div>
-      <div class="stat-card"><div class="stat-label">Total wishes</div><div class="stat-value">${totalGifts}</div></div>
+      <div class="stat-card"><div class="stat-label">Active wishes</div><div class="stat-value">${totalGifts}</div></div>
       <div class="stat-card"><div class="stat-label">Gifts claimed</div><div class="stat-value" style="color:#D4537E">${totalClaimed}</div></div>
     </div>
     <h3 style="font-size:15px;font-weight:600;margin-bottom:0.75rem">Progress by person</h3>${rows}`;
