@@ -293,6 +293,12 @@
     <div class="section-tabs">
       <button class="section-tab active" onclick="switchTab('wishlists',this)">Wishlists</button>
       <button class="section-tab" onclick="switchTab('overview',this)">Overview</button>
+      <button class="section-tab" onclick="switchTab('piechart',this)">🥧 Pie Chart</button>
+    </div>
+
+    <!-- Pie Chart tab -->
+    <div id="tab-piechart" style="display:none;">
+      <div class="overview-wrap" id="piechart-content"></div>
     </div>
 
     <!-- Wishlist tab -->
@@ -439,6 +445,7 @@ let state = {
   pendingDeletePersonId:null, modalMode:'own',
   showArchive:false,
   sortCol:'', sortDir:'asc',
+  pieGrouping:'person',
 };
 
 // ─── Firebase ────────────────────────────────────────────────────────────────
@@ -452,11 +459,11 @@ function initFirebase(){
     db.ref('giftmanager').on('value', snap=>{
       const data=snap.val();
       if(data){
-        const {currentUser:cu,selectedPersonId:sel,filterOccasion:fil,showArchive:sa,sortCol:sc,sortDir:sd}=state;
+        const {currentUser:cu,selectedPersonId:sel,filterOccasion:fil,showArchive:sa,sortCol:sc,sortDir:sd,pieGrouping:pg}=state;
         state=Object.assign({},state,{
           people:data.people||state.people, gifts:data.gifts||state.gifts,
           nextId:data.nextId||state.nextId, nextPersonId:data.nextPersonId||state.nextPersonId,
-          currentUser:cu,selectedPersonId:sel,filterOccasion:fil,showArchive:sa,sortCol:sc,sortDir:sd,
+          currentUser:cu,selectedPersonId:sel,filterOccasion:fil,showArchive:sa,sortCol:sc,sortDir:sd,pieGrouping:pg,
         });
         state.gifts=state.gifts.map(g=>({comment:'',archived:false,...g}));
         localSave();
@@ -531,7 +538,9 @@ function switchTab(tab,btn){
   btn.classList.add('active');
   document.getElementById('tab-wishlists').style.display=tab==='wishlists'?'block':'none';
   document.getElementById('tab-overview').style.display=tab==='overview'?'block':'none';
+  document.getElementById('tab-piechart').style.display=tab==='piechart'?'block':'none';
   if(tab==='overview')renderOverview();
+  if(tab==='piechart')renderPieChart();
 }
 
 function renderApp(){renderUserSelect();renderPersonTabs();renderWishlist();}
@@ -857,7 +866,103 @@ function renderOverview(){
     </table>`;
 }
 
-// ─── Boot ─────────────────────────────────────────────────────────────────────
+// ─── Pie Chart ────────────────────────────────────────────────────────────────
+function renderPieChart(){
+  const el=document.getElementById('piechart-content');
+  const activeGifts=state.gifts.filter(g=>!g.archived&&!g.isSuggestion);
+
+  if(!activeGifts.length){
+    el.innerHTML=`<div style="text-align:center;padding:3rem;color:var(--text2)"><div style="font-size:48px;margin-bottom:.5rem">🥧</div><div>No gifts yet to chart!</div></div>`;
+    return;
+  }
+
+  // Slice configs — we offer three groupings the user can switch between
+  const GROUPINGS = [
+    { key:'person',  label:'By person',   fn: g => state.people.find(p=>p.id===g.personId)?.name||'Unknown' },
+    { key:'occasion',label:'By occasion', fn: g => g.occasion.charAt(0).toUpperCase()+g.occasion.slice(1) },
+    { key:'claimed', label:'By status',   fn: g => g.claimed?'Claimed':'Unclaimed' },
+  ];
+
+  const currentGrouping = state.pieGrouping || 'person';
+
+  // Palette — enough distinct colours for any reasonable family size / occasion count
+  const PALETTE = [
+    '#D4537E','#4F86C6','#5BAD72','#E8A838','#8B6BBE',
+    '#E06B5A','#3DAAA8','#C2845A','#6B8E6B','#B05A8A',
+    '#7A9EC2','#D4A017',
+  ];
+
+  // Count slices
+  const groupFn = GROUPINGS.find(g=>g.key===currentGrouping).fn;
+  const counts = {};
+  activeGifts.forEach(g=>{ const k=groupFn(g); counts[k]=(counts[k]||0)+1; });
+  const total = activeGifts.length;
+  const slices = Object.entries(counts)
+    .sort((a,b)=>b[1]-a[1])
+    .map(([label,count],i)=>({ label, count, pct:count/total, color:PALETTE[i%PALETTE.length] }));
+
+  // SVG pie — drawn as arcs
+  const CX=160, CY=160, R=130, IR=55; // donut
+  let angle=-Math.PI/2; // start at top
+  function polarToXY(cx,cy,r,a){ return [cx+r*Math.cos(a), cy+r*Math.sin(a)]; }
+
+  const paths = slices.map(s=>{
+    const start=angle, sweep=s.pct*2*Math.PI;
+    angle+=sweep;
+    const end=angle;
+    const [x1,y1]=polarToXY(CX,CY,R,start);
+    const [x2,y2]=polarToXY(CX,CY,R,end);
+    const [ix1,iy1]=polarToXY(CX,CY,IR,start);
+    const [ix2,iy2]=polarToXY(CX,CY,IR,end);
+    const large=sweep>Math.PI?1:0;
+    // Midpoint angle for label line
+    const mid=start+sweep/2;
+    const [lx,ly]=polarToXY(CX,CY,R*0.68,mid); // label anchor inside slice
+    return { ...s, d:`M${x1},${y1} A${R},${R} 0 ${large},1 ${x2},${y2} L${ix2},${iy2} A${IR},${IR} 0 ${large},0 ${ix1},${iy1} Z`, lx, ly, startAngle:start, sweep };
+  });
+
+  const svgPaths = paths.map((s,i)=>{
+    const pctLabel = s.pct>0.04 ? `<text x="${s.lx}" y="${s.ly}" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="600" fill="white" style="pointer-events:none">${Math.round(s.pct*100)}%</text>` : '';
+    return `<path d="${s.d}" fill="${s.color}" stroke="var(--bg)" stroke-width="2" opacity="0.92">
+      <title>${s.label}: ${s.count} gift${s.count!==1?'s':''} (${Math.round(s.pct*100)}%)</title>
+    </path>${pctLabel}`;
+  }).join('');
+
+  // Centre label
+  const centreLabel=`<text x="${CX}" y="${CY-8}" text-anchor="middle" font-size="26" font-weight="700" fill="var(--text)">${total}</text>
+    <text x="${CX}" y="${CY+13}" text-anchor="middle" font-size="11" fill="var(--text2)">total gifts</text>`;
+
+  // Legend
+  const legend = slices.map(s=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:0.5px solid var(--border)">
+      <div style="width:12px;height:12px;border-radius:3px;background:${s.color};flex-shrink:0"></div>
+      <div style="flex:1;font-size:13px">${s.label}</div>
+      <div style="font-size:12px;color:var(--text2);font-weight:600">${s.count}</div>
+      <div style="font-size:12px;color:var(--text3);width:36px;text-align:right">${Math.round(s.pct*100)}%</div>
+    </div>`).join('');
+
+  // Grouping toggles
+  const toggles = GROUPINGS.map(g=>`
+    <button onclick="state.pieGrouping='${g.key}';renderPieChart()"
+      style="padding:5px 12px;font-size:12px;border-radius:20px;border:0.5px solid var(--border2);background:${currentGrouping===g.key?'var(--pink)':'none'};color:${currentGrouping===g.key?'#fff':'var(--text2)'};cursor:pointer;font-family:var(--font);transition:all .15s">
+      ${g.label}
+    </button>`).join('');
+
+  el.innerHTML=`
+    <div style="display:flex;align-items:flex-start;gap:2rem;flex-wrap:wrap">
+      <div style="flex-shrink:0">
+        <svg viewBox="0 0 320 320" width="320" height="320" style="display:block">
+          ${svgPaths}
+          ${centreLabel}
+        </svg>
+        <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:0.5rem">${toggles}</div>
+      </div>
+      <div style="flex:1;min-width:200px;align-self:center">
+        <div style="font-size:13px;font-weight:600;margin-bottom:0.5rem;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;font-size:11px">Legend</div>
+        ${legend}
+      </div>
+    </div>`;
+}
 localLoad();
 populateLoginDropdown();
 initFirebase();
